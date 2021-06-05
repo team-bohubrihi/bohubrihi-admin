@@ -1,0 +1,17 @@
+/* This file is for reusuable css classes */
+
+.middle{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cPointer{cursor: pointer}
+
+.menu{
+    margin-left: auto;
+}
+
+.noShadowBtn:focus{
+    box-shadow: none!important;
+}

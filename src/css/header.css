@@ -1,0 +1,7 @@
+.usrOptions{
+    right: 0;
+}
+
+@media only screen and (max-width: 768px){
+.menu{width: 100px;}
+}
