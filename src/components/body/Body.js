@@ -20,16 +20,16 @@ const Body = props => {
     useEffect(()=>{if(!token){props.authCheck()}});
 
     let renderable = (<Switch>
-        <Route path='/admin/login' component={Auth}/>
-        <Route path='/admin/recover' component={Recover}/>
-        <Redirect to='/admin/login' />
+        <Route path='/login' component={Auth}/>
+        <Route path='/recover' component={Recover}/>
+        <Redirect to='/login' />
     </Switch>)
     if(token){
         renderable=(<>
             <Header/>
             <Switch>
-                <Route path='/admin/home' component={Home}/>
-                <Redirect to='/admin/home'/>
+                <Route path='/home' component={Home}/>
+                <Redirect to='/home'/>
             </Switch>
         </>)
     }
