@@ -9,7 +9,7 @@ import '../css/auth.css';
 const AuthForm=props=>{
     const alert = props.alertMsg ? <AlertMsg type='danger' msg={props.alertMsg}/> : null;
     const isLogin = props.formType==='login';
-    let passFiled=null, link='/admin/login', linkTxt='Go to Login', submitTxt='Search';
+    let passFiled=null, link='/login', linkTxt='Go to Login', submitTxt='Search';
 
     if(isLogin){
         passFiled = (
@@ -18,7 +18,7 @@ const AuthForm=props=>{
             <Input type="password" className='mt-1 text-white' value={props.pass} onChange={e=>props.onChangePass(e.target.value)} placeholder="Enter Your Password" />
         </FormGroup>);
 
-        link = '/admin/recover';
+        link = '/recover';
         linkTxt = 'Forgot Password?';
         submitTxt = 'Login';
     }

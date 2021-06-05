@@ -27,7 +27,7 @@ const Header = props => {
     return (
     <Navbar color="dark" light expand="md">
         <Container>
-            <NavbarBrand href="/admin"><img src='/brandLogo.png' alt='Logo'/></NavbarBrand>
+            <NavbarBrand href="/"><img src='/brandLogo.png' alt='Logo'/></NavbarBrand>
 
             <NavbarToggler className='bg-white px-1 py-0' onClick={() => setIsOpen(!isOpen)} />
 
