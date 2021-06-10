@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {userAuth} from '../../redux/authActionCreators';
 import {toggleAlert} from '../../redux/actionCreators';
 import {connect} from 'react-redux';
-import AuthForm from '../../utils/AuthForm';
+import AuthForm from '../../UIs/AuthForm';
 
 const mapStateToProps = state => ({
     loading: state.auth.authLoading

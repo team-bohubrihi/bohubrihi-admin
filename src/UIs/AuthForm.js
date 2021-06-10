@@ -1,9 +1,9 @@
 import React from 'react';
 import {Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import Loader from './Loader';
-import AlertMsg from './AlertMsg';
-import {titleChanger} from './helpers';
+import Loader from '../utils/Loader';
+import AlertMsg from '../utils/AlertMsg';
+import {titleChanger} from '../utils/helpers';
 import '../css/auth.css';
 
 const AuthForm=props=>{
