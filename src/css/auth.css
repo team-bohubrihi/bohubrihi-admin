@@ -1,89 +1,98 @@
 .auth_wrapper {
-    background: linear-gradient(#2f2f2f, #3f51b5);
-    height: 100vh;
+  background: linear-gradient(#2f2f2f, #3f51b5);
+  height: 100vh;
 }
 
 .auth_wrap {
-    max-width: 450px;
-    width: 98%;
-    height: 90vh;
-    box-shadow: 0 0 10px 5px #00000070;
+  max-width: 450px;
+  width: 98%;
+  height: 90vh;
+  box-shadow: 0 0 10px 5px #00000070;
 }
 
 .auth_wrap::before {
-    content: '';
-    position: absolute;
-    top: -300px;
-    left: 100px;
-    width: 50%;
-    height: 200%;
-    background: #0015fb;
-    transform: rotate(-45deg);
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: -300px;
+  left: 100px;
+  width: 50%;
+  height: 200%;
+  background: #0015fb;
+  transform: rotate(-45deg);
+  z-index: 1;
 }
 
-.auth_form{
-    background: linear-gradient(90deg, #2241ead9, #251008d9);
-    z-index: 2;
+.auth_form {
+  background: linear-gradient(90deg, #2241ead9, #251008d9);
+  z-index: 2;
 }
 
 .auth_form .logo_wrap img {
-    background: #ffffff;
-    padding: 5px;
-    border: 2px solid #000000;
-    box-shadow: 0 0 5px 5px #00000054;
-    width: 80px;
-    height: 80px;
+  background: #ffffff;
+  padding: 5px;
+  border: 2px solid #000000;
+  box-shadow: 0 0 5px 5px #00000054;
+  width: 80px;
+  height: 80px;
 }
 
-.auth_form label{
-    font-size: 18px;
+.auth_form label {
+  font-size: 18px;
 }
 
-.auth_form input, .auth_form input:focus{
-    background: linear-gradient(#00000000, #000000af);
-    box-shadow: none;
-    border: 1px solid #000000;
+.auth_form input,
+.auth_form input:focus {
+  background: linear-gradient(#00000000, #000000af);
+  box-shadow: none;
+  border: 1px solid #000000;
 }
 
-.auth_form input:focus{background: linear-gradient(#000000, #00000000)}
-
-.auth_form input::placeholder{
-    color: rgb(228, 233, 160);
+.auth_form input:focus {
+  background: linear-gradient(#000000, #00000000);
 }
 
-.auth_form button.submitBtn{
-    font-size: 20px;
-	background: linear-gradient(#0080FF, #051B71);
-    
-    width: 100px;
+.auth_form input::placeholder {
+  color: rgb(228, 233, 160);
+}
+
+.auth_form button.submitBtn {
+  font-size: 20px;
+  background: linear-gradient(#0080ff, #051b71);
+
+  width: 100px;
 }
 
 /* Button hover effect for pc/laptop */
-@media only screen and (min-width:992px){
-.auth_form button.submitBtn span{z-index: 2;}
+@media only screen and (min-width: 992px) {
+  .auth_form button.submitBtn span {
+    z-index: 2;
+  }
 
-.auth_form button.submitBtn::before, .auth_form button.submitBtn::after {
-	content: '';
-	position: absolute;
-	width: 0;
-	height: 100%;
-	transition: all .4s;
-	z-index: 1;
-	transform: skew(-70deg);
-}
+  .auth_form button.submitBtn::before,
+  .auth_form button.submitBtn::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 100%;
+    transition: all 0.4s;
+    z-index: 1;
+    transform: skew(-70deg);
+  }
 
-.auth_form button.submitBtn::before {
-	left: -58px;
-	top: 0;
-	background: linear-gradient(#051B71, #0080FF);
-}
+  .auth_form button.submitBtn::before {
+    left: -58px;
+    top: 0;
+    background: linear-gradient(#051b71, #0080ff);
+  }
 
-.auth_form button.submitBtn:after{
-	right: -58px;
-	bottom: 0;
-	background: linear-gradient(#051B71, #0080FF);
-}
+  .auth_form button.submitBtn:after {
+    right: -58px;
+    bottom: 0;
+    background: linear-gradient(#051b71, #0080ff);
+  }
 
-.auth_form button.submitBtn:hover::before, .auth_form button.submitBtn:hover::after{width: 110%}
+  .auth_form button.submitBtn:hover::before,
+  .auth_form button.submitBtn:hover::after {
+    width: 110%;
+  }
 }
