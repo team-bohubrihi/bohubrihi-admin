@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import { toggleAlert } from '../../redux/actionCreators';
 import { userAuth } from '../../redux/authActionCreators';
-import AuthForm from '../../utils/AuthForm';
+import AuthForm from '../../UIs/AuthForm';
 
 const mapStateToProps = (state) => ({
     loading: state.auth.authLoading,

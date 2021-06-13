@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import '../css/auth.css';
-import AlertMsg from './AlertMsg';
-import { titleChanger } from './helpers';
-import Loader from './Loader';
+import AlertMsg from '../utils/AlertMsg';
+import { titleChanger } from '../utils/helpers';
+import Loader from '../utils/Loader';
 
 const AuthForm = (props) => {
     const {
