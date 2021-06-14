@@ -1,7 +1,9 @@
-.usrOptions{
-    right: 0;
+.usrOptions {
+  right: 0;
 }
 
-@media only screen and (max-width: 768px){
-.menu{width: 100px;}
+@media only screen and (max-width: 768px) {
+  .menu {
+    width: 100px;
+  }
 }
