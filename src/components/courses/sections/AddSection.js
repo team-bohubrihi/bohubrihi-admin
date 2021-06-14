@@ -9,7 +9,6 @@ import {
     Modal,
     ModalBody,
     ModalFooter,
-    // eslint-disable-next-line prettier/prettier
     ModalHeader
 } from 'reactstrap';
 
