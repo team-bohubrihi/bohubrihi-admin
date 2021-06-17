@@ -1,0 +1,116 @@
+/*style={{background: 'linear-gradient(90deg, #1f407eda, #0d1b36e8), url(/bohubrihi.jpg) center center no-repeat'}}*/
+
+
+.courseDataFrm{
+    background: linear-gradient(45deg, #2f2f2f, #3f51b5);
+}
+
+.modal{
+    padding: 5px!important;
+}
+
+.courseDataFrm label{
+    font-size: 19px;
+}
+
+.courseDataFrm input[type='text']{
+    box-shadow: inset 2px 2px 5px #000000,
+                inset -2px -2px 5px #ffffff;
+}
+
+.courseDataFrm input[type='number'], .courseDataFrm select, .courseDataFrm select:focus{
+    background: #4400ff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #ffffff,
+                -2px -2px 5px #000000;
+}
+
+.courseDataFrm input[type='text']:focus, .courseDataFrm input[type='number']:focus, .courseDataFrm select:focus{
+    box-shadow: inset 2px 2px 8px #000000,
+                inset -2px -2px 8px #ffffff;
+}
+
+.toolbar{
+    background: linear-gradient(#000000a4, #7700ffab);
+}
+
+.toolbar a{
+    text-decoration: none;
+}
+
+.editor{
+    background: linear-gradient(#ffffff, #ffffff85);
+    height: 30vh;
+    box-shadow: inset 2px 2px 10px #000000,
+                inset -2px -2px 10px #7700ff;
+}
+
+.editor div.DraftEditor-root{
+    height: auto;
+}
+
+.CourseImgWrap{
+    height: calc(100vh - 135px);
+}
+
+@media only screen and (max-width: 991px){
+.CourseImgWrap{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+}
+
+.singleCourseImg{
+    max-height: calc(100vh - 150px);
+}
+
+.removeImgBtn{
+    top: 0;
+    left: 0;
+    color: transparent!important;
+    background: transparent!important;
+    transition: .5s;
+}
+
+.removeImgBtn:hover{
+    color: #fff!important;
+    background: #2f2a2a96!important;
+    border-color: #fff!important;
+}
+
+.cropContainer {
+    height: 300px;
+}
+
+
+.iconsWrap{
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+
+.singleIcon{
+    flex-basis: calc(10% - .5rem);
+}
+
+@media only screen and (max-width: 575px){
+.singleIcon{
+    flex-basis: calc(20% - .5rem);
+}}
+
+.singleIcon svg, .singleFeature p svg{
+    font-size: 18px;
+    color: #fff;
+}
+
+.singleIcon:hover, .singleIcon:hover svg{
+    border-color: #00e1ff!important;
+    color: #00e1ff;
+}
+
+.singleFeature p{
+    font-size: 18px;
+}
+
+.singleFeature p svg{
+    font-size: 30px;
+}

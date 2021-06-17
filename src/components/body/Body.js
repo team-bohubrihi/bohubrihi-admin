@@ -33,6 +33,6 @@ const Body = props => {
             </Switch>
         </>)
     }
-    return <>{renderable}</>
+    return <div className='bg-secondary'>{renderable}</div>
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Body);

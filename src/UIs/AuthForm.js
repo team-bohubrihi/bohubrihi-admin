@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import {Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import Loader from '../utils/Loader';
 import AlertMsg from '../utils/AlertMsg';
@@ -15,7 +15,7 @@ const AuthForm=props=>{
         passFiled = (
         <FormGroup className='my-4'>
             <Label>Password</Label>
-            <Input type="password" className='mt-1 text-white' value={props.pass} onChange={e=>props.onChangePass(e.target.value)} placeholder="Enter Your Password" />
+            <Input type="password" className='mt-1 text-white whitePlaceholder' value={props.pass} onChange={e=>props.onChangePass(e.target.value)} placeholder="Enter Your Password" />
         </FormGroup>);
 
         link = '/recover';
@@ -33,7 +33,7 @@ const AuthForm=props=>{
                 {alert}
                 <FormGroup className='my-4'>
                     <Label>Email</Label>
-                    <Input type="text" className='mt-1 text-white' value={props.email} onChange={e=>props.onChangeEmail(e.target.value)} placeholder='Enter Your Email' />
+                    <Input type="text" className='mt-1 text-white whitePlaceholder' value={props.email} onChange={e=>props.onChangeEmail(e.target.value)} placeholder='Enter Your Email' />
                 </FormGroup>
                 {passFiled}
                 <Button disabled={props.isDisable} type='submit' className='position-relative overflow-hidden noShadowBtn submitBtn'>

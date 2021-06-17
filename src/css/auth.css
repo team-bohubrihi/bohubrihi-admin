@@ -48,10 +48,6 @@
 
 .auth_form input:focus{background: linear-gradient(#000000, #00000000)}
 
-.auth_form input::placeholder{
-    color: rgb(228, 233, 160);
-}
-
 .auth_form button.submitBtn{
     font-size: 20px;
 	background: linear-gradient(#0080FF, #051B71);

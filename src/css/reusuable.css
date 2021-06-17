@@ -6,12 +6,27 @@
     transform: translate(-50%, -50%);
 }
 
+.resetInputStyle, .resetInputStyle:focus{
+    outline: none;
+    box-shadow: none;
+}
+
 .cPointer{cursor: pointer}
 
 .menu{
     margin-left: auto;
 }
 
+.whitePlaceholder::placeholder{
+    color: #e4e9a0;
+}
+
 .noShadowBtn:focus{
     box-shadow: none!important;
+}
+
+.dashedBtn{
+    font-size: 24px;
+    color: #495057;
+    border: 2px dashed #6c757d;
 }
