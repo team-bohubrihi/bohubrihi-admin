@@ -1,8 +1,10 @@
-import React, {useEffect} from 'react';
-import {titleChanger} from '../../../utils/helpers';
+import { useEffect } from 'react';
+import { titleChanger } from '../../../utils/helpers';
+// import Courses from '../../courses/Courses';
 
-const Home = props=>{
-    useEffect(()=>titleChanger('Home'));
-    return <div>Home</div>
-}
+const Home = () => {
+    useEffect(() => titleChanger('Home'));
+    return <div>Home</div>;
+    // return <Courses />;
+};
 export default Home;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Changes the page title
 const mainTitle = 'Bohubrihi Admin';
 export const titleChanger = title => document.title = title+' - '+mainTitle;
@@ -55,3 +56,8 @@ const createImage = url =>
     // As Base64 string
     return canvas.toDataURL('image/jpeg');
   }
+=======
+/* eslint-disable  */
+const mainTitle = 'Bohubrihi Admin';
+export const titleChanger = (title) => (document.title = `${title} - ${mainTitle}`);
+>>>>>>> e89e20bf7c98e6ed99b2d2730917c3a3d0860c3c
