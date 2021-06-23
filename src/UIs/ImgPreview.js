@@ -3,6 +3,7 @@ import {Col, Button} from 'reactstrap';
 import Slider from '@material-ui/core/Slider';
 import Cropper from 'react-easy-crop';
 import {getCroppedImg} from '../utils/helpers';
+import AlertMsg from '../utils/AlertMsg';
 import ImgDialog from './ImgDialog';
 
 const ImgPreview = props => {
@@ -37,7 +38,7 @@ const ImgPreview = props => {
           image={props.img}
           crop={crop}
           zoom={zoom}
-          aspect={7 / 4}
+          aspect={props.aspect}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
@@ -61,6 +62,7 @@ const ImgPreview = props => {
   }
 
   return <Col className='my-1' xl='4' lg='4' md='6' sm='12' xs='12'>
+      <AlertMsg type='danger' msg='Img Size Is Small!' />
     <div className='position-relative bg-secondary rounded singleCourseImg'>
       {renderable}
     </div>

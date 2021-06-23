@@ -15,10 +15,12 @@ export const logout = () => (dispatch) => {
 };
 
 export const authCheck = () => (dispatch) => {
+    dispatch(authLoading(true));
     const token = localStorage.getItem('bohubrihiToken');
 
     if (!token || parseInt(localStorage.getItem('bohubrihiExpiresIn')) < Date.now()) {
         dispatch(logout());
+        dispatch(authLoading(false));
         return;
     }
 
@@ -29,6 +31,7 @@ export const authCheck = () => (dispatch) => {
             uId: localStorage.getItem('bohubrihiUId'),
         })
     );
+    dispatch(authLoading(false));
 };
 
 export const userAuth = (email, pass) => (dispatch) => {

@@ -1,6 +1,6 @@
 /* eslint-disable  */
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     Collapse,
@@ -18,12 +18,9 @@ import {
 import '../../css/header.css';
 import { logout } from '../../redux/authActionCreators';
 
-const mapDispatchToProps = (dispatch) => ({
-    logout: () => dispatch(logout()),
-});
-
-const Header = (props) => {
+const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const dispatch = useDispatch();
 
     return (
         <Navbar color="dark" light expand="md">
@@ -57,7 +54,7 @@ const Header = (props) => {
                                 </DropdownItem>
                                 <DropdownItem className="py-0" divider />
 
-                                <DropdownItem onClick={props.logout} className="py-1">
+                                <DropdownItem onClick={()=>dispatch(logout())} className="py-1">
                                     Logout
                                 </DropdownItem>
                             </DropdownMenu>
@@ -68,4 +65,4 @@ const Header = (props) => {
         </Navbar>
     );
 };
-export default connect(null, mapDispatchToProps)(Header);
+export default Header;

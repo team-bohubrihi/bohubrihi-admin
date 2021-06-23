@@ -1,28 +1,21 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
-import { authCheck } from '../redux/authActionCreators';
 
-const PrivateRoute = ({ children, ...rest }) => {
-    const token = useSelector((state) => state.auth.token);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(authCheck);
-    }, [dispatch, token]);
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    const token = useSelector(state => state.auth.token);
 
     return (
         <Route
             {...rest}
-            render={({ location }) =>
+            render={props =>
                 token ? (
-                    children
+                    <Component {...props} />
                 ) : (
                     <Redirect
                         to={{
                             pathname: '/login',
-                            state: { from: location },
+                            state: { from: props.location },
                         }}
                     />
                 )
@@ -30,5 +23,4 @@ const PrivateRoute = ({ children, ...rest }) => {
         />
     );
 };
-
 export default PrivateRoute;

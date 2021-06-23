@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleAlert: (bool) => dispatch(toggleAlert(bool)),
 });
 
-const Auth = (props) => {
+const Auth = props => {
     const { token } = props;
     const history = useHistory();
     const location = useLocation();

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, FormGroup, Label, Input, Container, Row, Col, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Modal from 'react-bootstrap/Modal';
 
@@ -14,56 +14,107 @@ import '../css/courseUploadPanelForm.css';
 
 import imageCompression from 'browser-image-compression';
 
-const CourseUploadPanelForm = props => {
-    const [courseDesc, setCourseDesc] = useState(EditorState.createEmpty());
-    const [syllabusDesc, setSyllabusDesc] = useState(EditorState.createEmpty());
+import {isAcceptableImg} from '../utils/helpers';
+
+import {useDispatch, useSelector} from 'react-redux';
+import {createCourseDraft, updateCourseData, loadCategories, loadFeatures, addCourseFeature, toggleAlert} from '../redux/actionCreators';
+
+const CourseUploadPanelForm = () => {
+    const {courseId, categories, features} = useSelector(state=>({
+        courseId: state.courseManage.newCourseId,
+        categories: state.courseManage.categories,
+        features: state.courseManage.courseFeatures,
+    }));
+    const dispatch = useDispatch();
+    useEffect(()=>{if(!categories)dispatch(loadCategories())}, [categories]);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const [initialCourseImgs, setInitialCourseImgs] = useState({
+    //temporary Btn state
+    const [newCourse, setNewCourse] = useState(false);
+
+    const [courseData, setCourseData] = useState({
+        title: '',
+        subtitle: '',
+        duration: '',
+        price: '',
+        discount: '',
+        language: '',
+        features: [],
+        desc: EditorState.createEmpty(),
+        syllabusDesc: EditorState.createEmpty(),
+        difficulty: '',
+        cat: ''
+    });
+
+    const changeCourseData = (data, name='desc', feature=null) => {
+        const target = data.target;
+        let value = data;
+
+        if(target && !feature){
+            name = target.name;
+            value = target.value;
+            if((target.type==='number' && value<0) || (name==='discount' && value>100))return;
+        }
+        if(feature){
+            value = [...courseData.features];
+            target.checked ? value = [...value, feature] : value.splice(value.indexOf(feature), 1);
+        }
+        setCourseData({
+            ...courseData,
+            [name]: value
+        });
+
+        dispatch(updateCourseData({
+            [name]: target ? value : draftToHtml(convertToRaw(value.getCurrentContent()))
+        }, courseId));
+    }
+
+    const [selectImgs, setSelectImgs] = useState({
         bgImg: null,
         listThumb: null,
         viewedThumb: null
     });
-
-    const [finalCourseImgs, setFinalCourseImgs] = useState({
+    const [compressedImgs, setCompressedImgs] = useState({
         bgImg: null,
         listThumb: null,
         viewedThumb: null
     });
-
-    console.log(finalCourseImgs)
-
-    const [courseImgLoading, setCourseImgLoading] = useState({
+    const [imgLoading, setImgLoading] = useState({
         bgImg: false,
         listThumb: false,
         viewedThumb: false
     });
 
     const bgImgRef = useRef();
-    const triggerBgImgRef = () => bgImgRef.current.click();
-
     const listThumbRef = useRef();
-    const triggerListThumbRef = () => listThumbRef.current.click();
-
     const viewedThumbRef = useRef();
+
+    const triggerBgImgRef = () => bgImgRef.current.click();
+    const triggerListThumbRef = () => listThumbRef.current.click();
     const triggerViewedThumbRef = () => viewedThumbRef.current.click();
 
-    const toolbarClasses = 'mb-0 p-2 border-0 rounded-0 rounded-top bg-transparent toolbar';
-    const editorClasses = 'border border-top-0 border-dark rounded-bottom px-2 py-0 mt-0 editor';
+    const courseImgInit = (name, img) => setSelectImgs({...selectImgs, [name]: img});
+    const courseImgFinalize = (name, img) => setCompressedImgs({...compressedImgs, [name]: img});
 
+    const toolbarClasses = 'mb-0 p-2 border-0 rounded-top bg-primary toolbar';
+    const editorClasses = 'bg-light rounded-bottom px-2 py-0 mt-0 editor';
     const lblClasses = 'text-white px-0 py-1';
     const inputClasses = 'bg-transparent border-0 text-white whitePlaceholder resetInputStyle';
 
-    const courseImgInit = (name, img) => setInitialCourseImgs({...initialCourseImgs, [name]: img});
-
-    const courseImgFinalize = (name, img) => setFinalCourseImgs({...finalCourseImgs, [name]: img});
+    const mapCategories = [];
+    if(categories){
+        for(let cat in categories)mapCategories.push(<option key={cat} value={cat}>{categories[cat]['name']}</option>);
+    }
 
     const handleImg = async(e) => {
         const name = e.target.name;
-        setCourseImgLoading({...courseImgLoading, [name]: true});
+        setImgLoading({...imgLoading, [name]: true});
         const imgUrl = await imageCompression.getDataUrlFromFile(e.target.files[0]);
+        const img = await imageCompression.loadImage(imgUrl);
+        const isAcceptable = isAcceptableImg(img, 1000, 500);
+        dispatch(toggleAlert(true));
         courseImgInit(name, imgUrl);
-        setCourseImgLoading({...courseImgLoading, [name]: false});
+        setImgLoading({...imgLoading, [name]: false});
         e.target.value=null;
     }
 
@@ -71,34 +122,36 @@ const CourseUploadPanelForm = props => {
         e.preventDefault();
     }
 
+   if(!newCourse)return <Button onClick={()=>{dispatch(createCourseDraft());setNewCourse(true)}}>New Course</Button>;
+
     return (
     <Container className='p-1 px-md-3'>
         <Form onSubmit={e=>handleCourse(e)} className='my-3 px-1 px-md-4 py-3 rounded border courseDataFrm'>
             <FormGroup className='mb-4'>
                 <Label className={lblClasses}>Course Title</Label>
-                <Input placeholder='Enter Course Title' className={inputClasses} type='text' />
+                <Input placeholder='Enter Course Title' name='title' onChange={e=>changeCourseData(e)} className={inputClasses} type='text' />
             </FormGroup>
 
             <FormGroup className='mb-4'>
                 <Label className={lblClasses}>Subtitle</Label>
-                <Input placeholder='Enter Course Subtitle' className={inputClasses} type='text' />
+                <Input placeholder='Enter Course Subtitle' name='subtitle' onChange={e=>changeCourseData(e)} className={inputClasses} type='text' />
             </FormGroup>
 
             <FormGroup className='p-0 mx-auto mw-100' row>
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white whitePlaceholder' placeholder='Course Duration' type='number' />
+                    <Input className='text-white border-0 whitePlaceholder' name='duration' onChange={e=>changeCourseData(e)} placeholder='Course Duration' value={courseData.duration} type='number' />
                 </Col>
 
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white whitePlaceholder' placeholder='Price' type='number' />
+                    <Input className='text-white border-0 whitePlaceholder' name='price' onChange={e=>changeCourseData(e)} placeholder='Price' value={courseData.price} type='number' />
                 </Col>
 
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white whitePlaceholder' placeholder='Discount(%)' type='number' min={0} max={100} />
+                    <Input className='text-white border-0 whitePlaceholder' name='discount' onChange={e=>changeCourseData(e)} placeholder='Discount(%)' type='number'  value={courseData.discount} />
                 </Col>
 
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white whitePlaceholder' type='select'>
+                    <Input className='text-white border-0 whitePlaceholder' name='language' onChange={e=>changeCourseData(e)} type='select'>
                         <option>--Language--</option>
                         <option>Bangla</option>
                         <option>English</option>
@@ -106,7 +159,7 @@ const CourseUploadPanelForm = props => {
                 </Col>
 
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white whitePlaceholder' type='select'>
+                    <Input className='text-white border-0 whitePlaceholder' name='difficulty' onChange={e=>changeCourseData(e)} type='select'>
                         <option>--Difficulty--</option>
                         <option>Basic</option>
                         <option>Intermidiate</option>
@@ -117,27 +170,28 @@ const CourseUploadPanelForm = props => {
                 </Col>
 
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white whitePlaceholder' type='select'>
+                    <Input className='text-white border-0 whitePlaceholder' name='cat' onChange={e=>changeCourseData(e)} type='select'>
                         <option>--Category--</option>
-                        <option>Programming</option>
-                        <option>Lifestyle</option>
-                        <option>Arts &amp; Drawing</option>
-                        <option>Mental Health</option>
-                        <option>Corporate</option>
+                        {mapCategories}
                     </Input>
                 </Col>
             </FormGroup>
 
             <FormGroup className='mb-4'>
-                <FeautresBox/>
+                <FeautresBox
+                    loadFeatures={()=>dispatch(loadFeatures())}
+                    features={features}
+                    uploadFeature={data=>dispatch(addCourseFeature(data))}
+                    selectFeature={changeCourseData}
+                />
             </FormGroup>
 
             <FormGroup className='mb-4'>
                 <Label className={lblClasses}>Course Description</Label>
 
                 <Editor
-                    editorState={courseDesc}
-                    onEditorStateChange={setCourseDesc}
+                    editorState={courseData.desc}
+                    onEditorStateChange={changeCourseData}
                     wrapperClassName='p-0'
                     toolbarClassName={toolbarClasses}
                     editorClassName={editorClasses}
@@ -148,17 +202,17 @@ const CourseUploadPanelForm = props => {
                 <Label className={lblClasses}>Syllabus Description(Optional)</Label>
 
                 <Editor
-                    editorState={syllabusDesc}
-                    onEditorStateChange={setSyllabusDesc}
+                    editorState={courseData.syllabusDesc}
+                    onEditorStateChange={state=>changeCourseData(state, 'syllabusDesc')}
                     wrapperClassName='p-0'
                     toolbarClassName={toolbarClasses}
                     editorClassName={editorClasses}
                 />
             </FormGroup>
 
-            <Button onClick={()=>setModalOpen(!modalOpen)} color='primary'>Select Course Images</Button>
+            <button className='d-block w-100 py-5 mb-3 rounded dashedBtn' onClick={()=>setModalOpen(!modalOpen)} >Select Course Images</button>
 
-            <Modal dialogClassName='mw-100 m-0' onHide={()=>setModalOpen(!modalOpen)} show={modalOpen}>
+            <Modal dialogClassName='mw-100 m-0' onHide={()=>setModalOpen(!modalOpen)} show={modalOpen} animation={false}>
                 <ModalHeader tag='h3' className='py-2 bg-secondary text-white'>
                     Add Course Images
                 </ModalHeader>
@@ -169,30 +223,33 @@ const CourseUploadPanelForm = props => {
                             alt='Background Image'
                             btnTrigger={triggerBgImgRef}
                             label='Select Background Image'
-                            img={initialCourseImgs.bgImg}
-                            loading={courseImgLoading.bgImg}
+                            img={selectImgs.bgImg}
+                            loading={imgLoading.bgImg}
                             modifyImg={val=>courseImgInit('bgImg', val)}
                             finalImg={val=>courseImgFinalize('bgImg', val)}
+                            aspect={40/21}
                         />
 
                         <ImgPreview
                             alt='List Thumbnail'
                             btnTrigger={triggerListThumbRef}
                             label='Select List Thumbnail'
-                            img={initialCourseImgs.listThumb}
-                            loading={courseImgLoading.listThumb}
+                            img={selectImgs.listThumb}
+                            loading={imgLoading.listThumb}
                             modifyImg={val=>courseImgInit('listThumb', val)}
                             finalImg={val=>courseImgFinalize('listThumb', val)}
+                            aspect={4/3}
                         />
 
                         <ImgPreview
                             alt='Viewed Thumbnail'
                             btnTrigger={triggerViewedThumbRef}
                             label='Select Viewed Thumbnail'
-                            img={initialCourseImgs.viewedThumb}
-                            loading={courseImgLoading.viewedThumb}
+                            img={selectImgs.viewedThumb}
+                            loading={imgLoading.viewedThumb}
                             modifyImg={val=>courseImgInit('viewedThumb', val)}
                             finalImg={val=>courseImgFinalize('viewedThumb', val)}
+                            aspect={66/37}
                         />
                     </Row>
                 </ModalBody>
@@ -224,7 +281,7 @@ const CourseUploadPanelForm = props => {
                 name='viewedThumb'
             />
 
-            <Button type='submit'>Submit</Button>
+            <Button type='submit'>Publish</Button>
         </Form>
     </Container>)
 }

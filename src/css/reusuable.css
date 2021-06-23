@@ -1,25 +1,32 @@
 /* This file is for reusuable css classes */
 
-.middle {
+.middle{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.cPointer {
-  cursor: pointer;
+.resetInputStyle, .resetInputStyle:focus{
+  outline: none;
+  box-shadow: none;
 }
 
-.menu {
+.cPointer{cursor: pointer}
+
+.menu{
   margin-left: auto;
 }
 
-.noShadowBtn:focus {
-  box-shadow: none !important;
+.whitePlaceholder::placeholder{
+  color: #e4e9a0;
+}
+
+.noShadowBtn:focus{
+  box-shadow: none!important;
 }
 
 .dashedBtn{
-    font-size: 24px;
-    color: #495057;
-    border: 2px dashed #6c757d;
+  font-size: 24px;
+  color: #495057;
+  border: 2px dashed #6c757d;
 }
