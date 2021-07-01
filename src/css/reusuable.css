@@ -1,19 +1,36 @@
 /* This file is for reusuable css classes */
 
-.middle {
+:root{
+  --loginBtnBg: linear-gradient(#051b71, #0080ff);
+  --abs: absolute;
+  --fff: #ffffff;
+  --dark: #000000;
+  --slow: .5s ease;
+}
+
+.middle{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.cPointer {
-  cursor: pointer;
+.transition{transition: var(--slow)}
+
+.resetInputStyle, .resetInputStyle:focus{
+  outline: none;
+  box-shadow: none;
 }
 
-.menu {
-  margin-left: auto;
-}
+.cPointer{cursor: pointer}
 
-.noShadowBtn:focus {
-  box-shadow: none !important;
+.menu{margin-left: auto}
+
+.whitePlaceholder::placeholder{color: #e4e9a0}
+
+.noShadowBtn:focus{box-shadow: none!important}
+
+.dashedBtn{
+  font-size: 24px;
+  color: #495057;
+  border: 2px dashed #6c757d;
 }
