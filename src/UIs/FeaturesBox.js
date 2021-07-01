@@ -1,140 +1,105 @@
 import React, {useState} from 'react';
-import {Collapse, Card, CardHeader, CardBody, ListGroup, ListGroupItem, Input, FormGroup, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {Spinner, Collapse, Card, CardHeader, CardBody, ListGroup, Button} from 'reactstrap';
+import IconBox from './IconBox';
+import AddFeature from './AddFeature';
+import SingleFeature from './SingleFeature';
+import AlertMsg from '../utils/AlertMsg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as icons from '@fortawesome/free-solid-svg-icons';
 
-const FeautresBox = props => {
-    const [isOpen, setIsOpen] = useState([false, false, false]);
-    const rotate = isOpen[0] ? 180 : 0;
-    const [loadBreak, setLoadBreak] = useState(0);
-    const iconNames = [...Object.getOwnPropertyNames(icons)];
-    const [renderedIcon, setRenderedIcon] = useState([]);
-    const [isMoreIconAvailabe, setIsMoreIconAvailabe] = useState(true);
-    const [featureTxt, setFeatureTxt] = useState('');
+const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, showAlert}) => {
+    const [isOpen, setIsOpen] = useState([false, false, false]);//toggler for tow collapses and a modal
+    const [featuresLoading, setFeaturesLoading] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(null);
-    const {loadFeatures, features, uploadFeature, selectFeature} = props;
+    const [featureTxt, setFeatureTxt] = useState('');
+    const [iconUploading, setIconUploading] = useState(false);
 
+    //Maping all the features loaded from the server
     const featuresMap = [];
     if(features){
         for(let feat in features){
             const _feat = features[feat];
-            featuresMap.push(<ListGroupItem key={feat} className='bg-dark p-0 singleFeature'>
-                <Row className='m-0'>
-                    <Col className='pt-3' xl='1' lg='1' md='1' sm='1' xs='2'>
-                        <FormGroup check className='d-block text-center'>
-                            <Input id={feat} onChange={e=>selectFeature(e, 'features', feat)} className='cPointer mt-2' type='checkbox' />
-                        </FormGroup>
-                    </Col>
-
-                    <Col className='bg-info position-relative' xl='1' lg='1' md='1' sm='1' xs='2'>
-                        <p className='position-absolute middle'>
-                            <FontAwesomeIcon icon={icons[_feat.icon]}/>
-                        </p>
-                    </Col>
-
-                    <Col className='pt-3 pb-2' xl='10' lg='10' md='10' sm='10' xs='8'>
-                        <p className='text-white'>{_feat.name}</p>
-                    </Col>
-                </Row>
-            </ListGroupItem>)
+            featuresMap.push(<SingleFeature
+                key={feat}
+                id={feat}
+                selectFeature={selectFeature}
+                icon={<FontAwesomeIcon icon={icons[_feat.icon]}/>}
+                name={_feat.name}
+            />);
         }
     }
 
     const toggle = (i, icon=null) => {
         let _isOpen = [...isOpen];
         _isOpen[i] = !_isOpen[i];
-        if(i===2 && loadBreak<1 && _isOpen[i] && !icon)loadIcons();
-        if(icon){
+        if(icon){//If an icon is selected to upload
             setSelectedIcon(icon);
             _isOpen[i]=false;
         }
-        if(i===0 && !features)loadFeatures();
-
         setIsOpen(_isOpen);
-    };
-
-    const loadIcons = () => {
-        const len = iconNames.length;
-        if(loadBreak>=len)return;
-        if(loadBreak+52>=len)setIsMoreIconAvailabe(false);
-        const iconsMap = [...renderedIcon];
-
-        let i;
-        for(i=loadBreak; i<=loadBreak+52; i++){
-            if(i===len)break;
-            const _icn = iconNames[i];
-            if(_icn==='fas' || _icn ==='faFontAwesomeLogoFull' || _icn.indexOf('fa')<0)continue;
-            iconsMap.push(<p onClick={()=>{toggle(2, _icn)}} key={i} className='m-1 cPointer border border-white rounded text-center py-2 singleIcon'><FontAwesomeIcon icon={icons[_icn]}/></p>);
+        if(i===0 && !features){//If the features are not loaded yet
+            setFeaturesLoading(true);
+            loadFeatures().then(()=>setFeaturesLoading(false))
         }
-        setRenderedIcon(iconsMap);
-        setLoadBreak(i);
-    }
+    };
 
     const uploadIcon = () => {
         if(!selectedIcon || featureTxt==='')return;
+        setIconUploading(true);
         const data = {icon: selectedIcon, name: featureTxt};
         uploadFeature(data)
         .then(name=>{
-            features[name] = data;
+            showAlert();
+            features[name] = data;//Add the uploaded feature on loaded features so it can render on ui
             setFeatureTxt('');
             setSelectedIcon(null);
+
+            //Get the uploaded feature from ui and make it selected as course feature
             const selector = document.getElementById(name);
             selector.checked = true;
-            selectFeature({target: selector}, 'features', name)
+            selectFeature({target: selector}, 'features', name);
+            setIconUploading(false);
         })
     }
 
-    return (<>
-        <Card className='overflow-hidden border-dark'>
-            <CardHeader tag='h5' onClick={()=>toggle(0)} className='text-white cPointer bg-dark'>
-                Course Features
-                <FontAwesomeIcon style={{transform: `rotate(${rotate}deg)`, transition: '.5s'}} className='float-right' icon={icons.faAngleUp}/>
-            </CardHeader>
+    return (<Card className='overflow-hidden border-dark'>
+        <CardHeader tag='h5' onClick={()=>toggle(0)} className='text-white cPointer bg-dark'>
+            Course Features
+            <FontAwesomeIcon style={{transform: `rotate(${isOpen[0] ? 180 : 0}deg)`}} className='float-right transition' icon={icons.faAngleUp}/>
+        </CardHeader>
 
-            <Collapse isOpen={isOpen[0]}>
-                <CardBody className='p-2'>
-                    <h4 className='bg-info mb-0 rounded-top overflow-hidden text-white p-2'>
-                        Features For Courses
-                        <Button title='Add New Feature' onClick={()=>toggle(1)} color='secondary' className='px-1 py-0 float-right'>
-                            <FontAwesomeIcon icon={icons.faPlus}/>
-                        </Button>
-                    </h4>
+        <Collapse isOpen={isOpen[0]}>
+            <CardBody className='p-2'>
+                <AlertMsg type='info' msg='Feature uploaded and added as a feature of this course.' />
+                <h4 className='bg-info mb-0 rounded-top overflow-hidden text-white p-2'>
+                    Features For Courses
+                    <Button title='Add New Feature' onClick={()=>toggle(1)} color='secondary' className='px-1 py-0 float-right'>
+                        <FontAwesomeIcon icon={icons.faPlus}/>
+                    </Button>
+                </h4>
 
-                    <div className='border-top-0 rounded-bottom mb-2 bg-primary'>
-                        <Collapse isOpen={isOpen[1]}>
-                            <Input placeholder='Enter The Feature' type='text' className='w-75 m-1 border-0 whitePlaceholder text-white d-inline bg-info' onChange={e=>setFeatureTxt(e.target.value)} value={featureTxt} />
+                <div className='border-top-0 text-center rounded-bottom mb-2 bg-primary'>
+                    <Collapse isOpen={isOpen[1]}>
+                        {iconUploading ? <Spinner className='bg-dark my-2' color='white' /> : <AddFeature
+                            icons={icons}
+                            FAIcon={FontAwesomeIcon}
+                            featureTxt={featureTxt}
+                            setFeatureTxt={setFeatureTxt}
+                            selectedIcon={selectedIcon}
+                            setSelectedIcon={setSelectedIcon}
+                            setIconUploading={setIconUploading}
+                            uploadIcon={uploadIcon}
+                            toggle={()=>toggle(2)}
+                        />}
+                    </Collapse>
+                </div>
 
-                            {selectedIcon ? (
-                            <p title='Remove This Icon' onClick={()=>setSelectedIcon(null)} className='d-inline-block  border border white py-1 rounded cPointer px-2 singleIcon'>
-                                <FontAwesomeIcon icon={icons[selectedIcon]}/>
-                            </p>) : (
-                            <Button onClick={()=>toggle(2)} className='p-1 m-1'>
-                                ICON
-                            </Button>
-                            )}
-
-                            <Button disabled={featureTxt==='' || !selectedIcon} color='info' className='p-1 m-1' onClick={uploadIcon}>UPLOAD</Button>
-                        </Collapse>
-                    </div>
-
-                    <ListGroup className='featuresWrap'>{featuresMap}</ListGroup>
-                </CardBody>
-            </Collapse>
-        </Card>
-
-        <Modal isOpen={isOpen[2]}>
-            <ModalHeader toggle={()=>toggle(2)} className='p-2 bg-secondary text-white w-100'>
-                Select Icon For Feature
-            </ModalHeader>
-
-            <ModalBody className='p-2 bg-info iconsWrap'>
-                <div className='d-flex flex-wrap p-1 bg-secondary border border-white rounded '>{renderedIcon}</div>
-            </ModalBody>
-
-            <ModalFooter className='bg-success p-0'>
-                {isMoreIconAvailabe ? <button className='mt-1 w-100 my-2 dashedBtn' onClick={loadIcons}>Load More</button> : null}
-            </ModalFooter>
-        </Modal>
-    </>)
+                <ListGroup className='featuresWrap'>
+                    {featuresLoading ? <Spinner className='mx-auto my-3 bg-info' /> : featuresMap}
+                </ListGroup>
+            </CardBody>
+        </Collapse>
+        <IconBox isOpen={isOpen[2]} FAIcon={FontAwesomeIcon} icons={icons} toggle={toggle}/>
+    </Card>)
 }
 export default FeautresBox;

@@ -11,20 +11,20 @@
 }
 
 .courseDataFrm input[type='text']{
-    box-shadow: inset 2px 2px 5px #000000,
-                inset -2px -2px 5px #ffffff;
+    box-shadow: inset 2px 2px 5px var(--dark),
+                inset -2px -2px 5px var(--fff);
 }
 
 .courseDataFrm input[type='number'], .courseDataFrm select, .courseDataFrm select:focus{
     background: #4400ff;
     border-radius: 5px;
-    box-shadow: 2px 2px 5px #ffffff,
-                -2px -2px 5px #000000;
+    box-shadow: 2px 2px 5px var(--fff),
+                -2px -2px 5px var(--dark);
 }
 
 .courseDataFrm input[type='text']:focus, .courseDataFrm input[type='number']:focus, .courseDataFrm select:focus{
-    box-shadow: inset 2px 2px 8px #000000,
-                inset -2px -2px 8px #ffffff;
+    box-shadow: inset 2px 2px 8px var(--dark),
+                inset -2px -2px 8px var(--fff);
 }
 
 .toolbar{
@@ -41,7 +41,7 @@
 
 .editor{
     height: 40vh;
-    box-shadow: inset 2px 2px 10px #000000,
+    box-shadow: inset 2px 2px 10px var(--dark),
                 inset -2px -2px 10px #007bff;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .CourseImgWrap{
-    height: calc(100vh - 135px);
+    height: calc(100vh - 75px);
 }
 
 @media only screen and (max-width: 991px){
@@ -65,17 +65,14 @@
 }
 
 .removeImgBtn{
-    top: 0;
-    left: 0;
-    color: transparent!important;
-    background: transparent!important;
-    transition: .5s;
+    top: 5px;
+    right: 10px;
 }
 
-.removeImgBtn:hover{
-    color: #fff!important;
-    background: #2f2a2a96!important;
-    border-color: #fff!important;
+@media only screen and (min-width: 992px) {
+.removeImgBtn{opacity: 0}
+
+.singleCourseImg:hover .removeImgBtn{opacity: 1}
 }
 
 .cropContainer {
@@ -99,7 +96,7 @@
 
 .singleIcon svg, .singleFeature p svg{
     font-size: 18px;
-    color: #fff;
+    color: var(--fff);
 }
 
 .singleIcon:hover, .singleIcon:hover svg{

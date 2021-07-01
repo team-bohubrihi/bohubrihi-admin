@@ -12,7 +12,7 @@
 
 .auth_wrap::before {
   content: "";
-  position: absolute;
+  position: var(--abs);
   top: -300px;
   left: 100px;
   width: 50%;
@@ -28,9 +28,9 @@
 }
 
 .auth_form .logo_wrap img {
-  background: #ffffff;
+  background: var(--fff);
   padding: 5px;
-  border: 2px solid #000000;
+  border: 2px solid var(--dark);
   box-shadow: 0 0 5px 5px #00000054;
   width: 80px;
   height: 80px;
@@ -44,11 +44,11 @@
 .auth_form input:focus {
   background: linear-gradient(#00000000, #000000af);
   box-shadow: none;
-  border: 1px solid #000000;
+  border: 1px solid var(--dark);
 }
 
 .auth_form input:focus {
-  background: linear-gradient(#000000, #00000000);
+  background: linear-gradient(var(--dark), #00000000);
 }
 
 .auth_form input::placeholder {
@@ -64,17 +64,15 @@
 
 /* Button hover effect for pc/laptop */
 @media only screen and (min-width: 992px) {
-  .auth_form button.submitBtn span {
-    z-index: 2;
-  }
+  .auth_form button.submitBtn span {z-index: 2}
 
   .auth_form button.submitBtn::before,
   .auth_form button.submitBtn::after {
     content: "";
-    position: absolute;
+    position: var(--abs);
     width: 0;
     height: 100%;
-    transition: all 0.4s;
+    transition: var(--slow);
     z-index: 1;
     transform: skew(-70deg);
   }
@@ -82,17 +80,17 @@
   .auth_form button.submitBtn::before {
     left: -58px;
     top: 0;
-    background: linear-gradient(#051b71, #0080ff);
+    background: var(--loginBtnBg);
   }
 
   .auth_form button.submitBtn:after {
     right: -58px;
     bottom: 0;
-    background: linear-gradient(#051b71, #0080ff);
+    background: var(--loginBtnBg);
   }
 
-  .auth_form button.submitBtn:hover::before,
-  .auth_form button.submitBtn:hover::after {
+  .auth_form button.submitBtn:not(:disabled):hover:before,
+  .auth_form button.submitBtn:not(:disabled):hover::after {
     width: 110%;
   }
 }

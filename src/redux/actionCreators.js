@@ -10,7 +10,19 @@ const getCategories = cats => acTypeDispatch(acTypes.GET_CATEGORIES, cats);
 const getFeatures = features => acTypeDispatch(acTypes.GET_FEATURES, features);
 
 export const createCourseDraft = () => dispatch => {
-    axios.post('https://admin-app-8e444-default-rtdb.firebaseio.com/courses.json', {status: 0})
+    axios.post('https://admin-app-8e444-default-rtdb.firebaseio.com/courses.json', {
+        cat: '',
+        desc: '',
+        difficulty: '',
+        discount: '',
+        duration: '',
+        language: '',
+        price: '',
+        status: '',
+        subtitle: '',
+        syllabusDesc: '',
+        title: ''
+    })
     .then(res=>dispatch(getNewCourseId(res.data.name)))
 }
 
@@ -24,7 +36,7 @@ export const loadCategories = () => dispatch => {
 }
 
 export const loadFeatures = () => dispatch => {
-    axios.get('https://admin-app-8e444-default-rtdb.firebaseio.com/features.json')
+    return axios.get('https://admin-app-8e444-default-rtdb.firebaseio.com/features.json')
     .then(res=>dispatch(getFeatures(res.data)))
     .catch(err=>console.log(err))
 }

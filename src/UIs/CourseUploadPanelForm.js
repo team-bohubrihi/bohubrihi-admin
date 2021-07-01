@@ -1,32 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, Form, FormGroup, Label, Input, Container, Row, Col, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Modal from 'react-bootstrap/Modal';
+import React, {useState} from 'react';
+import { Button, Form, FormGroup, Label, Input, Container, Col } from 'reactstrap';
 
-import ImgPreview from './ImgPreview';
 import FeautresBox from './FeaturesBox';
+import CourseImgSelector from './CourseImgSelector';
+import ImgSelectModal from './ImgSelectModal';
 
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import '../css/courseUploadPanelForm.css';
-
-import imageCompression from 'browser-image-compression';
-
-import {isAcceptableImg} from '../utils/helpers';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {createCourseDraft, updateCourseData, loadCategories, loadFeatures, addCourseFeature, toggleAlert} from '../redux/actionCreators';
 
+import '../css/courseUploadPanelForm.css';
+
 const CourseUploadPanelForm = () => {
-    const {courseId, categories, features} = useSelector(state=>({
-        courseId: state.courseManage.newCourseId,
-        categories: state.courseManage.categories,
-        features: state.courseManage.courseFeatures,
+    const {courseId, categories, features} = useSelector(({courseManage})=>({
+        courseId: courseManage.newCourseId,
+        categories: courseManage.categories,
+        features: courseManage.courseFeatures,
     }));
     const dispatch = useDispatch();
-    useEffect(()=>{if(!categories)dispatch(loadCategories())}, [categories]);
     const [modalOpen, setModalOpen] = useState(false);
 
     //temporary Btn state
@@ -69,31 +64,11 @@ const CourseUploadPanelForm = () => {
         }, courseId));
     }
 
-    const [selectImgs, setSelectImgs] = useState({
-        bgImg: null,
-        listThumb: null,
-        viewedThumb: null
-    });
     const [compressedImgs, setCompressedImgs] = useState({
         bgImg: null,
         listThumb: null,
         viewedThumb: null
     });
-    const [imgLoading, setImgLoading] = useState({
-        bgImg: false,
-        listThumb: false,
-        viewedThumb: false
-    });
-
-    const bgImgRef = useRef();
-    const listThumbRef = useRef();
-    const viewedThumbRef = useRef();
-
-    const triggerBgImgRef = () => bgImgRef.current.click();
-    const triggerListThumbRef = () => listThumbRef.current.click();
-    const triggerViewedThumbRef = () => viewedThumbRef.current.click();
-
-    const courseImgInit = (name, img) => setSelectImgs({...selectImgs, [name]: img});
     const courseImgFinalize = (name, img) => setCompressedImgs({...compressedImgs, [name]: img});
 
     const toolbarClasses = 'mb-0 p-2 border-0 rounded-top bg-primary toolbar';
@@ -104,18 +79,6 @@ const CourseUploadPanelForm = () => {
     const mapCategories = [];
     if(categories){
         for(let cat in categories)mapCategories.push(<option key={cat} value={cat}>{categories[cat]['name']}</option>);
-    }
-
-    const handleImg = async(e) => {
-        const name = e.target.name;
-        setImgLoading({...imgLoading, [name]: true});
-        const imgUrl = await imageCompression.getDataUrlFromFile(e.target.files[0]);
-        const img = await imageCompression.loadImage(imgUrl);
-        const isAcceptable = isAcceptableImg(img, 1000, 500);
-        dispatch(toggleAlert(true));
-        courseImgInit(name, imgUrl);
-        setImgLoading({...imgLoading, [name]: false});
-        e.target.value=null;
     }
 
     const handleCourse = e => {
@@ -129,12 +92,12 @@ const CourseUploadPanelForm = () => {
         <Form onSubmit={e=>handleCourse(e)} className='my-3 px-1 px-md-4 py-3 rounded border courseDataFrm'>
             <FormGroup className='mb-4'>
                 <Label className={lblClasses}>Course Title</Label>
-                <Input placeholder='Enter Course Title' name='title' onChange={e=>changeCourseData(e)} className={inputClasses} type='text' />
+                <Input placeholder='Enter Course Title' name='title' onChange={e=>changeCourseData(e)} className={inputClasses} type='text' autoComplete='off' />
             </FormGroup>
 
             <FormGroup className='mb-4'>
                 <Label className={lblClasses}>Subtitle</Label>
-                <Input placeholder='Enter Course Subtitle' name='subtitle' onChange={e=>changeCourseData(e)} className={inputClasses} type='text' />
+                <Input placeholder='Enter Course Subtitle' name='subtitle' onChange={e=>changeCourseData(e)} className={inputClasses} type='text' autoComplete='off' />
             </FormGroup>
 
             <FormGroup className='p-0 mx-auto mw-100' row>
@@ -170,9 +133,9 @@ const CourseUploadPanelForm = () => {
                 </Col>
 
                 <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                    <Input className='text-white border-0 whitePlaceholder' name='cat' onChange={e=>changeCourseData(e)} type='select'>
+                    <Input onFocus={()=> !categories ? dispatch(loadCategories()) : null} className='text-white border-0 whitePlaceholder' name='cat' onChange={e=>changeCourseData(e)} type='select'>
                         <option>--Category--</option>
-                        {mapCategories}
+                        {categories ? mapCategories : <option>Loading...</option>}
                     </Input>
                 </Col>
             </FormGroup>
@@ -183,6 +146,7 @@ const CourseUploadPanelForm = () => {
                     features={features}
                     uploadFeature={data=>dispatch(addCourseFeature(data))}
                     selectFeature={changeCourseData}
+                    showAlert={()=>dispatch(toggleAlert(true))}
                 />
             </FormGroup>
 
@@ -210,76 +174,9 @@ const CourseUploadPanelForm = () => {
                 />
             </FormGroup>
 
-            <button className='d-block w-100 py-5 mb-3 rounded dashedBtn' onClick={()=>setModalOpen(!modalOpen)} >Select Course Images</button>
+            <CourseImgSelector openModal={()=>setModalOpen(true)} imgs={compressedImgs}/>
 
-            <Modal dialogClassName='mw-100 m-0' onHide={()=>setModalOpen(!modalOpen)} show={modalOpen} animation={false}>
-                <ModalHeader tag='h3' className='py-2 bg-secondary text-white'>
-                    Add Course Images
-                </ModalHeader>
-
-                <ModalBody className='p-2 bg-info CourseImgWrap'>
-                    <Row>
-                        <ImgPreview
-                            alt='Background Image'
-                            btnTrigger={triggerBgImgRef}
-                            label='Select Background Image'
-                            img={selectImgs.bgImg}
-                            loading={imgLoading.bgImg}
-                            modifyImg={val=>courseImgInit('bgImg', val)}
-                            finalImg={val=>courseImgFinalize('bgImg', val)}
-                            aspect={40/21}
-                        />
-
-                        <ImgPreview
-                            alt='List Thumbnail'
-                            btnTrigger={triggerListThumbRef}
-                            label='Select List Thumbnail'
-                            img={selectImgs.listThumb}
-                            loading={imgLoading.listThumb}
-                            modifyImg={val=>courseImgInit('listThumb', val)}
-                            finalImg={val=>courseImgFinalize('listThumb', val)}
-                            aspect={4/3}
-                        />
-
-                        <ImgPreview
-                            alt='Viewed Thumbnail'
-                            btnTrigger={triggerViewedThumbRef}
-                            label='Select Viewed Thumbnail'
-                            img={selectImgs.viewedThumb}
-                            loading={imgLoading.viewedThumb}
-                            modifyImg={val=>courseImgInit('viewedThumb', val)}
-                            finalImg={val=>courseImgFinalize('viewedThumb', val)}
-                            aspect={66/37}
-                        />
-                    </Row>
-                </ModalBody>
-
-                <ModalFooter className='py-2 bg-secondary'>
-                    <Button color='info' onClick={()=>setModalOpen(!modalOpen)}>OK</Button>
-                </ModalFooter>
-            </Modal>
-
-            <input
-                ref={bgImgRef}
-                onChange={e=>handleImg(e)}
-                className='d-none'
-                type='file'
-                name='bgImg'
-            />
-            <input
-                ref={listThumbRef}
-                onChange={e=>handleImg(e)}
-                className='d-none'
-                type='file'
-                name='listThumb'
-            />
-            <input
-                ref={viewedThumbRef}
-                onChange={e=>handleImg(e)}
-                className='d-none'
-                type='file'
-                name='viewedThumb'
-            />
+            <ImgSelectModal modalOpen={modalOpen} toggleModal={setModalOpen} compressedImgs={compressedImgs} courseImgFinalize={courseImgFinalize}/>
 
             <Button type='submit'>Publish</Button>
         </Form>

@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { toggleAlert } from '../../redux/actionCreators';
-import AuthForm from '../../UIs/AuthForm';
+import { useSelector, useDispatch } from 'react-redux';
+//import { toggleAlert } from '../../redux/actionCreators';
+import AuthForm from './AuthForm';
 
-const mapStateToProps = (state) => ({
-    loading: state.auth.authLoading,
-});
+const Recover = () => {
+    const loading = useSelector(({auth})=>auth.authLoading);
+    const dispatch = useDispatch();
 
-const mapDispatchToProps = (dispatch) => ({
-    toggleAlert: (bool) => dispatch(toggleAlert(bool)),
-});
-
-const Recover = (props) => {
     const [email, setEmail] = useState('');
-    const { loading } = props;
     // const [alertMsg, setAlertMsg] = useState(null);
     const isDisable = email === '';
 
@@ -31,7 +25,8 @@ const Recover = (props) => {
             handleSubmit={handleRecover}
             loading={loading}
             isDisable={isDisable}
+            dispatch={dispatch}
         />
     );
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Recover);
+export default Recover;
