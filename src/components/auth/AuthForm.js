@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import '../../css/auth.css';
 import AlertMsg from '../../utils/AlertMsg';
 import { authCheck } from '../../redux/authActionCreators';
@@ -14,7 +14,11 @@ const AuthForm = ({alertMsg, formType, loading, email, isDisable, pass, onChange
     const {token} = useSelector(state=>({token: state.auth.token}));
 
     const history = useHistory();
-    useEffect(() => token ? history.replace('/') : dispatch(authCheck()), [history, token]);
+    const location = useLocation();
+    useEffect(() => {
+        const { from } = location.state || { from: { pathname: '/' } };
+        token ? history.replace(from) : dispatch(authCheck())
+    }, [history, token]);
 
     const alert = alertMsg ? <AlertMsg type="danger" msg={alertMsg} /> : null;
     const isLogin = formType === 'login';
@@ -40,14 +44,14 @@ const AuthForm = ({alertMsg, formType, loading, email, isDisable, pass, onChange
     }
 
     return (<div onLoad={() => titleChanger(isLogin ? 'Login' : 'Recover Your Password')} className="auth_wrapper">
-        {loading ? <Loader /> : (<div className="position-absolute rounded border border-white middle overflow-hidden auth_wrap">
+        {loading ? <Loader /> : (<div className="position-absolute rounded middle overflow-hidden auth_wrap">
             <Form
                 onSubmit={(e) => handleSubmit(e)}
                 className="text-white position-relative p-2 h-100 auth_form"
             >
                 <div className="text-center my-4 logo_wrap">
                     <a target="_blank" rel="noreferrer" href="http://bohubrihi.com">
-                        <img alt="bohubrihi" className="rounded-circle" src="/logo.png" />
+                        <img alt="bohubrihi" className="rounded-circle p-2 bg-info" src="/logo.png" />
                     </a>
                 </div>
                 {alert}

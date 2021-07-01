@@ -1,5 +1,5 @@
 .auth_wrapper {
-  background: linear-gradient(#2f2f2f, #3f51b5);
+  background: linear-gradient(#017955, #000980);
   height: 100vh;
 }
 
@@ -7,7 +7,7 @@
   max-width: 450px;
   width: 98%;
   height: 90vh;
-  box-shadow: 0 0 10px 5px #00000070;
+  box-shadow: 3px 3px 3px var(--dark), -2px -2px 3px var(--fff);
 }
 
 .auth_wrap::before {
@@ -28,10 +28,8 @@
 }
 
 .auth_form .logo_wrap img {
-  background: var(--fff);
-  padding: 5px;
-  border: 2px solid var(--dark);
-  box-shadow: 0 0 5px 5px #00000054;
+  box-shadow: inset 1px 1px 5px #2133d4,
+              inset -1px -1px 5px #e222e9;
   width: 80px;
   height: 80px;
 }

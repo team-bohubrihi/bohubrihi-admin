@@ -5,7 +5,7 @@
   --abs: absolute;
   --fff: #ffffff;
   --dark: #000000;
-  --slow: .5 ease;
+  --slow: .5s ease;
 }
 
 .middle{
