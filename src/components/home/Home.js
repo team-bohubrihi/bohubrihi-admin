@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { titleChanger } from '../../../utils/helpers';
+import { titleChanger } from '../../utils/helpers';
 // import Courses from '../../courses/Courses';
-import CourseUploadPanelForm from '../../../UIs/CourseUploadPanelForm';
+import CourseUploadPanelForm from '../../UIs/CourseUploadPanelForm';
 
 const Home = () => {
     useEffect(() => titleChanger('Home'));
-    return <CourseUploadPanelForm/>;
+    return <></>
 };
 export default Home;

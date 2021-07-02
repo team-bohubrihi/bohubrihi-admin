@@ -23,7 +23,7 @@ function Sections({ courseId }) {
     }, [courseId]);
 
     return (
-        <div>
+        <div className='container'>
             <h1>Sections Page</h1>
             <AddSection courseId={courseId} secNo={data.length + 1} />
             {data.map((section) => (
