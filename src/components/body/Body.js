@@ -13,20 +13,18 @@ import Sidebar from '../../UIs/Sidebar';
 const Body = () => {
     const token = useSelector((state) => state.auth.token);
 
-    return(
-        <>
-            {token ? <><Header/><Sidebar/></> : null}
+    return(<>
+        {token ? <><Header/><Sidebar/></> : null}
 
-            <Switch>
-                <PrivateRoute exact path="/" component={Home} />
-                <PrivateRoute path="/courses" component={Courses} />
-                <PrivateRoute path="/course/:courseId" component={ManageCourse} />
+        <Switch>
+            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute path="/courses" component={Courses} />
+            <PrivateRoute path="/course/:courseId" component={ManageCourse} />
 
-                <Route path="/recover" component={Recover} />
-                <Route path="/login" component={Auth} />
-                <Route path='*' component={NotFound404} />
-            </Switch>
-        </>
-    );
+            <Route path="/recover" component={Recover} />
+            <Route path="/login" component={Auth} />
+            <Route path='*' component={NotFound404} />
+        </Switch>
+    </>);
 }
 export default Body;
