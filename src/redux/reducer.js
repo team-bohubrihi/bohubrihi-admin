@@ -8,6 +8,9 @@ const initialState = {
     uId: null,
     authLoading: false,
     showAlert: false,
+    newCourseId: null,
+    categories: null,
+    courseFeatures: null
 };
 
 // This reducer is used for authentication.
@@ -51,9 +54,36 @@ const utilityReducer = (state = initialState, action) => {
     }
 };
 
+//Handles course uploading & editing
+const courseManageReducer = (state=initialState, action) => {
+    switch(action.type){
+        case acTypes.NEW_COURSE_ID:
+            return{
+                ...state,
+                newCourseId: action.payload
+            }
+
+        case acTypes.GET_CATEGORIES:
+            return{
+                ...state,
+                categories: action.payload
+            }
+
+        case acTypes.GET_FEATURES:
+            return{
+                ...state,
+                courseFeatures: action.payload
+            }
+
+        default:
+            return state;
+    }
+}
+
 // Combining all the reducers
 const reducer = combineReducers({
     auth: authReducer,
     utility: utilityReducer,
+    courseManage: courseManageReducer
 });
 export default reducer;

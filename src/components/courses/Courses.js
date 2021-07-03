@@ -23,7 +23,7 @@ const Courses = () => {
     }, []);
 
     return (
-        <div>
+        <div className='container'>
             <h1>Courses</h1>
             {data.map((course) => (
                 <Course key={course.id} {...course} />

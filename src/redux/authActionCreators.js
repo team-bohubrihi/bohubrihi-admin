@@ -14,24 +14,21 @@ export const logout = () => (dispatch) => {
     dispatch(acTypeDispatch(authAcTypes.LOGOUT));
 };
 
-export const authCheck = () => (dispatch) => {
+export const authCheck = () => dispatch => {
     const token = localStorage.getItem('bohubrihiToken');
+    const email = localStorage.getItem('bohubrihiUsrEmail');
+    const uId = localStorage.getItem('bohubrihiUId');
 
-    if (!token || parseInt(localStorage.getItem('bohubrihiExpiresIn')) < Date.now()) {
+    if (!token || parseInt(localStorage.getItem('bohubrihiExpiresIn')) < Date.now() || !email || !uId) {
         dispatch(logout());
         return;
     }
 
-    dispatch(
-        usrLogin({
-            email: localStorage.getItem('bohubrihiUsrEmail'),
-            token,
-            uId: localStorage.getItem('bohubrihiUId'),
-        })
-    );
+    dispatch(usrLogin({email, token, uId}));
 };
 
-export const userAuth = (email, pass) => (dispatch) => {
+export const userAuth = (email, pass) => dispatch => {
+    if(!email || !pass)return;
     const data = {
         email,
         password: pass,
@@ -40,29 +37,26 @@ export const userAuth = (email, pass) => (dispatch) => {
 
     dispatch(authLoading(true));
     return axios
-        .post(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_WEB_API}`,
-            data
-        )
-        .then((res) => {
-            const { data } = res;
+        .post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_WEB_API}`, data)
+        .then(res => {
+            const { email, expiresIn, idToken, localId } = res.data;
 
-            localStorage.setItem('bohubrihiUsrEmail', data.email);
-            localStorage.setItem('bohubrihiExpiresIn', data.expiresIn * 1000 + Date.now());
-            localStorage.setItem('bohubrihiToken', data.idToken);
-            localStorage.setItem('bohubrihiUId', data.localId);
+            localStorage.setItem('bohubrihiUsrEmail', email);
+            localStorage.setItem('bohubrihiExpiresIn', expiresIn * 1000 + Date.now());
+            localStorage.setItem('bohubrihiToken', idToken);
+            localStorage.setItem('bohubrihiUId', localId);
             dispatch(
                 usrLogin({
-                    email: data.email,
-                    token: data.idToken,
-                    uId: data.localId,
+                    email,
+                    token: idToken,
+                    uId: localId,
                 })
             );
             dispatch(authLoading(false));
             return res.request.status;
         })
-        .catch((err) => {
+        .catch((res) => {
             dispatch(authLoading(false));
-            return err.request.status;
+            return res.request.status;
         });
 };

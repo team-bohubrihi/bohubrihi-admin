@@ -1,0 +1,120 @@
+.courseDataFrm{
+    background: linear-gradient(45deg, #48e6d5, #3f51b5);
+}
+
+.modal{
+    padding: 5px!important;
+}
+
+.courseDataFrm label{
+    font-size: 19px;
+}
+
+.courseDataFrm input[type='text']{
+    box-shadow: inset 2px 2px 5px var(--dark),
+                inset -2px -2px 5px var(--fff);
+}
+
+.courseDataFrm input[type='number'], .courseDataFrm select, .courseDataFrm select:focus{
+    background: #4400ff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px var(--fff),
+                -2px -2px 5px var(--dark);
+}
+
+.courseDataFrm input[type='text']:focus, .courseDataFrm input[type='number']:focus, .courseDataFrm select:focus{
+    box-shadow: inset 2px 2px 8px var(--dark),
+                inset -2px -2px 8px var(--fff);
+}
+
+.toolbar{
+    background:  #7700ffab;
+}
+
+ .rdw-colorpicker-modal{
+    left: -100px!important;
+}
+
+.toolbar a{
+    text-decoration: none;
+}
+
+.editor{
+    height: 40vh;
+    box-shadow: inset 2px 2px 10px var(--dark),
+                inset -2px -2px 10px #007bff;
+}
+
+.editor div.DraftEditor-root{
+    height: auto;
+}
+
+.CourseImgWrap{
+    height: calc(100vh - 75px);
+}
+
+@media only screen and (max-width: 991px){
+.CourseImgWrap{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+}
+
+.singleCourseImg{
+    max-height: calc(100vh - 150px);
+}
+
+.removeImgBtn{
+    top: 5px;
+    right: 10px;
+}
+
+@media only screen and (min-width: 992px) {
+.removeImgBtn{opacity: 0}
+
+.singleCourseImg:hover .removeImgBtn{opacity: 1}
+}
+
+.cropContainer {
+    height: 300px;
+}
+
+
+.iconsWrap{
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+
+.singleIcon{
+    flex-basis: calc(10% - .5rem);
+}
+
+@media only screen and (max-width: 575px){
+.singleIcon{
+    flex-basis: calc(20% - .5rem);
+}}
+
+.singleIcon svg, .singleFeature p svg{
+    font-size: 18px;
+    color: var(--fff);
+}
+
+.singleIcon:hover, .singleIcon:hover svg{
+    border-color: #00e1ff!important;
+    color: #00e1ff;
+}
+
+.singleFeature p{
+    font-size: 18px;
+}
+
+.singleFeature p svg{
+    font-size: 30px;
+}
+
+
+.featuresWrap{
+    max-height: 50vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
