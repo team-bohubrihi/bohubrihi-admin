@@ -19,7 +19,7 @@ const IconBox = ({isOpen, icons, FAIcon, toggle}) => {
             const _icn = iconNames[i];
             if(_icn==='fas' || _icn==='far' || _icn ==='faFontAwesomeLogoFull' || _icn.indexOf('fa')<0)continue;//To avoid unnecessary property from icon's object
 
-            iconsMap.push(<p className='m-1 cPointer border border-white rounded text-center py-2 singleIcon' onClick={()=>toggle(2, _icn)} key={i}>
+            iconsMap.push(<p className='m-1 cPointer border border-white rounded text-center py-2 py-lg-3 singleIcon' onClick={()=>toggle(2, _icn)} key={i}>
                 <FAIcon icon={icons[_icn]}/>
             </p>);
         }
@@ -29,7 +29,7 @@ const IconBox = ({isOpen, icons, FAIcon, toggle}) => {
 
     useEffect(()=>(isOpen && loadBreak<1) ? loadIcons() : null, [isOpen, loadBreak]);
 
-    return (<Modal isOpen={isOpen}>
+    return (<Modal size='xl' fade={false} isOpen={isOpen}>
         <ModalHeader toggle={()=>toggle(2)} className='p-2 bg-secondary text-white w-100'>
             Select Icon For Feature
         </ModalHeader>

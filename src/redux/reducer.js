@@ -8,7 +8,7 @@ const initialState = {
     uId: null,
     authLoading: false,
     showAlert: false,
-    newCourseId: null,
+    newCourse: {},
     categories: null,
     courseFeatures: null
 };
@@ -57,10 +57,13 @@ const utilityReducer = (state = initialState, action) => {
 //Handles course uploading & editing
 const courseManageReducer = (state=initialState, action) => {
     switch(action.type){
-        case acTypes.NEW_COURSE_ID:
+        case acTypes.NEW_COURSE:
             return{
                 ...state,
-                newCourseId: action.payload
+                newCourse: {
+                    ...state.newCourse,
+                    ...action.payload
+                }
             }
 
         case acTypes.GET_CATEGORIES:
