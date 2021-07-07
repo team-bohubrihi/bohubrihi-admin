@@ -10,7 +10,7 @@ import NotFound404 from '../404/404';
 import ManageCourse from '../courses/ManageCourse';
 import Header from '../header/Header';
 import Home from '../home/Home';
-import Sidebar from '../../UIs/Sidebar';
+import Sidebar from '../sidebar/Sidebar';
 const Body = () => {
     const token = useSelector((state) => state.auth.token);
 

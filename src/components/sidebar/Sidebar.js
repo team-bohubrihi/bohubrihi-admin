@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import {ListGroup, ListGroupItem} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faAngleRight, faAngleLeft, faHome, faUniversity, faUserAlt, faTag, faBook} from '@fortawesome/free-solid-svg-icons';
-import '../css/sidebar.css';
+import '../../css/sidebar.css';
 
 const Sidebar = () => {
   const [sidebar, setsidebar] = useState(false);
