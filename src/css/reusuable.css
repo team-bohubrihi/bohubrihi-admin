@@ -3,9 +3,12 @@
 :root{
   --loginBtnBg: linear-gradient(#051b71, #0080ff);
   --abs: absolute;
-  --fff: #ffffff;
-  --dark: #000000;
+  --dark0: #000000;
   --slow: .5s ease;
+}
+
+.maxElementWidth{
+  max-width: 1400px;
 }
 
 .middle{

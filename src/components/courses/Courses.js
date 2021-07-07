@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Course from './Course';
+import { Link } from 'react-router-dom';
+import {Card, CardHeader, CardTitle, CardBody, ListGroup, ListGroupItem, Button} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
 
 const Courses = () => {
     const [data, setData] = useState([]);
@@ -23,11 +27,28 @@ const Courses = () => {
     }, []);
 
     return (
-        <div className='container'>
-            <h1>Courses</h1>
-            {data.map((course) => (
-                <Course key={course.id} {...course} />
-            ))}
+        <div className='container mt-2'>
+        <Card>
+            <CardHeader>
+                <CardTitle tag='h3'>
+                    Courses
+
+                    <Link title='Add a new course' to='/new-course/landing-page' className='float-right'>
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </Link>
+                </CardTitle>
+            </CardHeader>
+
+            <CardBody className='p-2'>
+                <ListGroup>
+                    {data.map((course) => (
+                        <ListGroupItem key={course.id}>
+                            <Course {...course} />
+                        </ListGroupItem>
+                    ))}
+                </ListGroup>
+            </CardBody>
+        </Card>
         </div>
     );
 };

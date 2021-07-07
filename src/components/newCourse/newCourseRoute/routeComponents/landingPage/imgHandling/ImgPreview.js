@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react';
 import {Col, Button, Spinner} from 'reactstrap';
 import Slider from '@material-ui/core/Slider';
 import Cropper from 'react-easy-crop';
-import {getCroppedImg} from '../utils/helpers';
+import {getCroppedImg} from '../../../../../../utils/helpers';
 import imageCompression from 'browser-image-compression';
 import ImgDialog from './ImgDialog';
 

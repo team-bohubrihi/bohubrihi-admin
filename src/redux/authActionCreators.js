@@ -55,8 +55,8 @@ export const userAuth = (email, pass) => dispatch => {
             dispatch(authLoading(false));
             return res.request.status;
         })
-        .catch((res) => {
+        .catch(err => {
             dispatch(authLoading(false));
-            return res.request.status;
+            return err.request.status;
         });
 };

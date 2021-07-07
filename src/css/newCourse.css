@@ -1,0 +1,28 @@
+.routeWrap{
+    height: calc(100vh - 140px);
+    overflow-y: scroll;
+}
+
+.activeCourseTab{
+    margin-right: -1px;
+    z-index: 1;
+}
+
+@media only screen and (max-width: 767px){
+    .newCourseNavbar{
+        right: -260px;
+        top: 0;
+        z-index: 1;
+        width: 260px;
+    }
+
+    .newCourseNavbarOpen{
+        right: 0;
+    }
+
+    .courseNavbarBtn{
+        left: -20px;
+        z-index: 2;
+        font-size: 23px;
+    }
+}

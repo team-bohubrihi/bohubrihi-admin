@@ -7,7 +7,7 @@
   max-width: 450px;
   width: 98%;
   height: 90vh;
-  box-shadow: 3px 3px 3px var(--dark), -2px -2px 3px var(--fff);
+  box-shadow: 3px 3px 5px var(--dark0), -3px -3px 5px var(--white);
 }
 
 .auth_wrap::before {
@@ -42,11 +42,11 @@
 .auth_form input:focus {
   background: linear-gradient(#00000000, #000000af);
   box-shadow: none;
-  border: 1px solid var(--dark);
+  border-color: var(--dark0);
 }
 
 .auth_form input:focus {
-  background: linear-gradient(var(--dark), #00000000);
+  background: linear-gradient(var(--dark0), #00000000);
 }
 
 .auth_form input::placeholder {

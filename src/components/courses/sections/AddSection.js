@@ -45,7 +45,7 @@ export default function AddSection({ courseId, secNo }) {
             <Button color="danger" onClick={toggle}>
                 Add Section
             </Button>
-            <Modal isOpen={modal} toggle={toggle}>
+            <Modal isOpen={modal} toggle={toggle} className='mw-100' >
                 <ModalHeader>Modal title</ModalHeader>
                 <ModalBody>
                     <Form>

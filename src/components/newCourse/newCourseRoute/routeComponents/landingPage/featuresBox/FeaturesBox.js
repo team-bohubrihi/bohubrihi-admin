@@ -1,43 +1,27 @@
 import React, {useState} from 'react';
-import {Spinner, Collapse, Card, CardHeader, CardBody, ListGroup, Button} from 'reactstrap';
-import IconBox from './IconBox';
-import AddFeature from './AddFeature';
-import SingleFeature from './SingleFeature';
-import AlertMsg from '../utils/AlertMsg';
+import {Spinner, Collapse, Card, CardHeader, CardBody, Button} from 'reactstrap';
+import AddFeature from './newFeature/AddFeature';
+import Features from './features/Features';
+import AlertMsg from '../../../../../../utils/AlertMsg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as icons from '@fortawesome/free-solid-svg-icons';
 
-const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, showAlert}) => {
-    const [isOpen, setIsOpen] = useState([false, false, false]);//toggler for tow collapses and a modal
+const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature}) => {
+    const [isOpen, setIsOpen] = useState([false, false, false]);//toggler for two collapses and IconBox
     const [featuresLoading, setFeaturesLoading] = useState(false);
-    const [selectedIcon, setSelectedIcon] = useState(null);
-    const [featureTxt, setFeatureTxt] = useState('');
-    const [iconUploading, setIconUploading] = useState(false);
-
-    //Maping all the features loaded from the server
-    const featuresMap = [];
-    if(features){
-        for(let feat in features){
-            const _feat = features[feat];
-            featuresMap.push(<SingleFeature
-                key={feat}
-                id={feat}
-                selectFeature={selectFeature}
-                icon={<FontAwesomeIcon icon={icons[_feat.icon]}/>}
-                name={_feat.name}
-            />);
-        }
-    }
+    const [selectedIcon, setSelectedIcon] = useState(null);//The selected icon for new feature
+    const [featureTxt, setFeatureTxt] = useState('');//The new feature text
+    const [iconUploading, setIconUploading] = useState(false);//Whether the new feature is uploading
 
     const toggle = (i, icon=null) => {
         let _isOpen = [...isOpen];
         _isOpen[i] = !_isOpen[i];
-        if(icon){//If an icon is selected to upload
+        if(icon){//If an icon is selected to upload, the icon box should be closed
             setSelectedIcon(icon);
             _isOpen[i]=false;
         }
         setIsOpen(_isOpen);
-        if(i===0 && !features){//If the features are not loaded yet
+        if(i===0 && !features){//If the features are not loaded yet, it should be loaded for only once
             setFeaturesLoading(true);
             loadFeatures().then(()=>setFeaturesLoading(false))
         }
@@ -49,7 +33,6 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, show
         const data = {icon: selectedIcon, name: featureTxt};
         uploadFeature(data)
         .then(name=>{
-            showAlert();
             features[name] = data;//Add the uploaded feature on loaded features so it can render on ui
             setFeatureTxt('');
             setSelectedIcon(null);
@@ -57,6 +40,7 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, show
             //Get the uploaded feature from ui and make it selected as course feature
             const selector = document.getElementById(name);
             selector.checked = true;
+            selector.scrollIntoView({behavior: "smooth", block: "end"});
             selectFeature({target: selector}, 'features', name);
             setIconUploading(false);
         })
@@ -78,7 +62,7 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, show
                     </Button>
                 </h4>
 
-                <div className='border-top-0 text-center rounded-bottom mb-2 bg-primary'>
+                <div className='border-top-0 rounded-bottom mb-2 bg-primary'>
                     <Collapse isOpen={isOpen[1]}>
                         {iconUploading ? <Spinner className='bg-dark my-2' color='white' /> : <AddFeature
                             icons={icons}
@@ -89,17 +73,21 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, show
                             setSelectedIcon={setSelectedIcon}
                             setIconUploading={setIconUploading}
                             uploadIcon={uploadIcon}
-                            toggle={()=>toggle(2)}
+                            toggle={toggle}
+                            isOpen={isOpen[2]}
                         />}
                     </Collapse>
                 </div>
 
-                <ListGroup className='featuresWrap'>
-                    {featuresLoading ? <Spinner className='mx-auto my-3 bg-info' /> : featuresMap}
-                </ListGroup>
+                <Features
+                    features={features}
+                    selectFeature={selectFeature}
+                    FAIcon={FontAwesomeIcon}
+                    icons={icons}
+                    loading={featuresLoading}
+                />
             </CardBody>
         </Collapse>
-        <IconBox isOpen={isOpen[2]} FAIcon={FontAwesomeIcon} icons={icons} toggle={toggle}/>
     </Card>)
 }
 export default FeautresBox;
