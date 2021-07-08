@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Button} from 'reactstrap';
 
 const IconBox = ({isOpen, icons, FAIcon, toggle}) => {
     const iconNames = [...Object.getOwnPropertyNames(icons)];
@@ -19,7 +19,7 @@ const IconBox = ({isOpen, icons, FAIcon, toggle}) => {
             const _icn = iconNames[i];
             if(_icn==='fas' || _icn==='far' || _icn ==='faFontAwesomeLogoFull' || _icn.indexOf('fa')<0)continue;//To avoid unnecessary property from icon's object
 
-            iconsMap.push(<p className='m-1 cPointer border border-white rounded text-center py-2 py-lg-3 singleIcon' onClick={()=>toggle(2, _icn)} key={i}>
+            iconsMap.push(<p className='m-1 cPointer border rounded text-center py-3 singleIcon' onClick={()=>toggle(2, _icn)} key={i}>
                 <FAIcon icon={icons[_icn]}/>
             </p>);
         }
@@ -30,17 +30,14 @@ const IconBox = ({isOpen, icons, FAIcon, toggle}) => {
     useEffect(()=>(isOpen && loadBreak<1) ? loadIcons() : null, [isOpen, loadBreak]);
 
     return (<Modal size='xl' fade={false} isOpen={isOpen}>
-        <ModalHeader toggle={()=>toggle(2)} className='p-2 bg-secondary text-white w-100'>
+        <ModalHeader toggle={()=>toggle(2)} className='p-2 bg-secondary text-white border-0 w-100'>
             Select Icon For Feature
         </ModalHeader>
 
-        <ModalBody className='p-2 bg-info iconsWrap'>
-            <div className='d-flex flex-wrap p-1 bg-secondary border border-white rounded '>{renderedIcons}</div>
+        <ModalBody className='d-flex flex-wrap p-1 border rounded-bottom bg-dark iconsWrap'>
+            {renderedIcons}
+            {isMoreAvailabe ? <Button color='primary' className='w-100 mt-1' onClick={loadIcons}>LOAD MORE</Button> : null}
         </ModalBody>
-
-        <ModalFooter className='bg-success p-0'>
-            {isMoreAvailabe ? <button className='mt-1 w-100 my-2 dashedBtn' onClick={loadIcons}>Load More</button> : null}
-        </ModalFooter>
     </Modal>)
 }
 export default IconBox;

@@ -55,14 +55,14 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature}) => 
         <Collapse isOpen={isOpen[0]}>
             <CardBody className='p-2'>
                 <AlertMsg type='info' msg='Feature uploaded and added as a feature of this course.' />
-                <h4 className='bg-info mb-0 rounded-top overflow-hidden text-white p-2'>
+                <h5 className='bg-info mb-0 rounded-top overflow-hidden text-white p-2'>
                     Features For Courses
                     <Button title='Add New Feature' onClick={()=>toggle(1)} color='secondary' className='px-1 py-0 float-right'>
                         <FontAwesomeIcon icon={icons.faPlus}/>
                     </Button>
-                </h4>
+                </h5>
 
-                <div className='border-top-0 rounded-bottom mb-2 bg-primary'>
+                <div className='border-top-0 rounded-bottom mb-1 bg-primary'>
                     <Collapse isOpen={isOpen[1]}>
                         {iconUploading ? <Spinner className='bg-dark my-2' color='white' /> : <AddFeature
                             icons={icons}

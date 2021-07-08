@@ -1,6 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {Col, Button, Spinner} from 'reactstrap';
-import Slider from '@material-ui/core/Slider';
+import {Col, Button, Spinner, Input} from 'reactstrap';
 import Cropper from 'react-easy-crop';
 import {getCroppedImg} from '../../../../../../utils/helpers';
 import imageCompression from 'browser-image-compression';
@@ -52,18 +51,8 @@ const ImgPreview = props => {
           />
         </div>
 
-        <div className='p-3 bg-white rounded-bottom'>
-          <div className='p-1'>
-            <Slider
-              value={zoom}
-              color='secondary'
-              min={1}
-              max={3}
-              step={0.1}
-              aria-labelledby="Zoom"
-              onChange={(e, zoom) => setZoom(zoom)}
-            />
-          </div>
+        <div className='p-2 bg-white rounded-bottom'>
+          <Input type='range' className='mb-1' min={1} max={3} step={.1} value={zoom} onChange={e=>setZoom(e.target.value)}/>
 
           <Button color='success' onClick={showCroppedImage}>Crop</Button>
           <Button color='info' onClick={()=>modifyImg(null)} className='ml-2'>Remove Image</Button>

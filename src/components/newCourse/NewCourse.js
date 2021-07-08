@@ -3,6 +3,7 @@ import {Link, useLocation, useHistory} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {Card, CardHeader, CardTitle, CardBody, Row, Col, ListGroup, ListGroupItem, Button} from 'reactstrap';
 import NewCourseRoute from './newCourseRoute/NewCourseRoute';
+import { titleChanger } from '../../utils/helpers';
 import '../../css/newCourse.css';
 
 const NewCourse = () => {
@@ -10,11 +11,12 @@ const NewCourse = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [resNavClass, setResNavClass] = useState('');
     const [windowSize, setWindowSize] = useState(window.innerWidth);
+    const isSm = windowSize<768;
 
-    const navToggler = resNavClass!=='' ? <Button color='primary' onClick={()=>setIsOpen(!isOpen)} className='position-absolute courseNavbarBtn p-1 pb-2'>{isOpen ? '-' : '+'}</Button> : null;
+    const navToggler = isSm ? <Button color='primary' onClick={()=>setIsOpen(!isOpen)} className='position-absolute courseNavbarBtn px-2 pt-1'>{isOpen ? '-' : '+'}</Button> : null;
 
     window.onresize = ()=>setWindowSize(window.innerWidth);
-    useEffect(()=>setResNavClass(windowSize<767 ? 'position-absolute newCourseNavbar transition' : ''), [windowSize]);
+    useEffect(()=>setResNavClass(isSm ? 'position-absolute newCourseNavbar transition' : ''), [windowSize]);
 
     const location = useLocation();
     const path = location.pathname;
@@ -26,9 +28,14 @@ const NewCourse = () => {
     }, []);
 
     const link = (to, label) => {
+        let active = '';
         to='/new-course/'+to;
-        const setActive = path===to ? 'bg-light activeCourseTab' : '';
-        return(<ListGroupItem className={'p-0 border-right-0 ' + setActive}>
+        if(path===to){
+            titleChanger(label);
+            active = 'bg-light activeCourseTab';
+        }
+
+        return(<ListGroupItem className={'p-0 border-right-0 ' + active}>
             <Link className='d-block py-3 px-2 text-decoration-none text-primary' to={to}>{label}</Link>
         </ListGroupItem>)
     }
@@ -40,7 +47,7 @@ const NewCourse = () => {
             </CardHeader>
 
             <CardBody className='p-1'>
-                <Row className='mx-100 m-0 position-relative'>
+                <Row className='m-0 position-relative'>
                     <Col className={'p-0 '+resNavClass + (isOpen ? ' newCourseNavbarOpen' : '')} xl='2' lg='2' md='2'>
                         {navToggler}
                         <ListGroup className='mt-md-5 rounded-0'>
