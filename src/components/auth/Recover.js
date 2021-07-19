@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-//import { toggleAlert } from '../../redux/actionCreators';
 import AuthForm from './AuthForm';
 
 const Recover = () => {
@@ -8,7 +7,6 @@ const Recover = () => {
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
-    // const [alertMsg, setAlertMsg] = useState(null);
     const isDisable = email === '';
 
     const handleRecover = (e) => {
@@ -19,7 +17,6 @@ const Recover = () => {
     return (
         <AuthForm
             formType="recover"
-            // alertMsg={alertMsg}
             email={email}
             onChangeEmail={setEmail}
             handleSubmit={handleRecover}

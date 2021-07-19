@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from 'axios';
-import { acTypeDispatch } from './actionCreators';
+import { acTypeDispatch, toggleAlert } from './actionCreators';
 import * as authAcTypes from './authActionTypes';
 
 const usrLogin = (data) => acTypeDispatch(authAcTypes.LOGIN, data);
@@ -14,17 +14,24 @@ export const logout = () => (dispatch) => {
     dispatch(acTypeDispatch(authAcTypes.LOGOUT));
 };
 
+// In case token is expired
+const authTimeout = expTime => dispatch => {
+    setTimeout(()=>dispatch(toggleAlert(true, 'danger', 'Your token is expired, logging you out.', ()=>dispatch(logout()))), expTime-Date.now());
+}
+
 export const authCheck = () => dispatch => {
     const token = localStorage.getItem('bohubrihiToken');
     const email = localStorage.getItem('bohubrihiUsrEmail');
     const uId = localStorage.getItem('bohubrihiUId');
+    const expTime = parseInt(localStorage.getItem('bohubrihiExpiresIn'));
 
-    if (!token || parseInt(localStorage.getItem('bohubrihiExpiresIn')) < Date.now() || !email || !uId) {
+    if (!token || expTime < Date.now() || !email || !uId) {
         dispatch(logout());
         return;
     }
 
     dispatch(usrLogin({email, token, uId}));
+    dispatch(authTimeout(expTime));
 };
 
 export const userAuth = (email, pass) => dispatch => {
@@ -36,27 +43,27 @@ export const userAuth = (email, pass) => dispatch => {
     };
 
     dispatch(authLoading(true));
-    return axios
-        .post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_WEB_API}`, data)
-        .then(res => {
-            const { email, expiresIn, idToken, localId } = res.data;
+    return axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_WEB_API}`, data)
+    .then(res => {
+        const { email, expiresIn, idToken, localId } = res.data;
+        const expTime = expiresIn * 1000 + Date.now();
 
-            localStorage.setItem('bohubrihiUsrEmail', email);
-            localStorage.setItem('bohubrihiExpiresIn', expiresIn * 1000 + Date.now());
-            localStorage.setItem('bohubrihiToken', idToken);
-            localStorage.setItem('bohubrihiUId', localId);
-            dispatch(
-                usrLogin({
-                    email,
-                    token: idToken,
-                    uId: localId,
-                })
-            );
-            dispatch(authLoading(false));
-            return res.request.status;
-        })
-        .catch(err => {
-            dispatch(authLoading(false));
-            return err.request.status;
-        });
+        localStorage.setItem('bohubrihiUsrEmail', email);
+        localStorage.setItem('bohubrihiExpiresIn', expTime);
+        localStorage.setItem('bohubrihiToken', idToken);
+        localStorage.setItem('bohubrihiUId', localId);
+        dispatch(
+            usrLogin({
+                email,
+                token: idToken,
+                uId: localId,
+            })
+        );
+        dispatch(authLoading(false));
+        dispatch(authTimeout(expTime));
+    })
+    .catch(({request}) => {
+        dispatch(authLoading(false));
+        dispatch(toggleAlert(true, 'danger', request.status === 0 ? 'No Internet Conection' : 'User Not Found'));
+    });
 };

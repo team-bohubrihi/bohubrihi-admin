@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Link, useLocation, useHistory} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {Card, CardHeader, CardTitle, CardBody, Row, Col, ListGroup, ListGroupItem, Button} from 'reactstrap';
-import NewCourseRoute from './newCourseRoute/NewCourseRoute';
+import NewCourseRoutes from './newCourseRoute/NewCourseRoutes';
 import { titleChanger } from '../../utils/helpers';
 import '../../css/newCourse.css';
 
@@ -56,11 +56,12 @@ const NewCourse = () => {
                             {link('syllabus', 'Syllabus')}
                             {link('pricing', 'Pricing')}
                             {link('instructor', 'Instructor')}
+                            {link('publishing', 'Publishing')}
                         </ListGroup>
                     </Col>
 
                     <Col className='p-1 p-md-3 border rounded bg-light routeWrap' xl='10' lg='10' md='10' sm='12' xs='12'>
-                        <NewCourseRoute/>
+                        <NewCourseRoutes/>
                     </Col>
                 </Row>
             </CardBody>

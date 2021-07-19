@@ -26,7 +26,7 @@ const Sidebar = () => {
   }
 
   return (<div className={'nav-menu position-fixed transition' + (sidebar ? ' opened' : '')}>
-    <button className='border-0 rounded-right position-absolute p1-2 pt-2 text-white sidebartoggler' onClick={toggle}>
+    <button className='border-0 rounded-right position-absolute p-2 pt-3 text-white sidebartoggler' onClick={toggle}>
         <FontAwesomeIcon className='h3' icon={sidebar ? faAngleLeft : faAngleRight} />
     </button>
 
@@ -34,8 +34,8 @@ const Sidebar = () => {
       {singleLink('/', faHome, 'Home')}
       {singleLink('/courses', faBook, 'Courses')}
       {singleLink('/new-course/landing-page', faPlusSquare, 'New Course')}
-      {singleLink('#', faList, 'Categories')}
-      {singleLink('#', faTags, 'Features')}
+      {singleLink('/category', faList, 'Categories')}
+      {singleLink('/feature', faTags, 'Features')}
     </ListGroup>
   </div>);
 };

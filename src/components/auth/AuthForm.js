@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { useHistory, useLocation } from 'react-router';
 import '../../css/auth.css';
-import AlertMsg from '../../utils/AlertMsg';
 import { authCheck } from '../../redux/authActionCreators';
 import { useSelector } from 'react-redux';
 import { titleChanger } from '../../utils/helpers';
 import Loader from '../../utils/Loader';
 
-const AuthForm = ({alertMsg, formType, loading, email, isDisable, pass, onChangePass, handleSubmit, onChangeEmail, dispatch}) => {
+const AuthForm = ({formType, loading, email, isDisable, pass, onChangePass, handleSubmit, onChangeEmail, dispatch}) => {
 
     const {token} = useSelector(state=>({token: state.auth.token}));
 
@@ -20,7 +19,6 @@ const AuthForm = ({alertMsg, formType, loading, email, isDisable, pass, onChange
         token ? history.replace(from) : dispatch(authCheck())
     }, [history, token]);
 
-    const alert = alertMsg ? <AlertMsg type="danger" msg={alertMsg} /> : null;
     const isLogin = formType === 'login';
     let passFiled = null;
     let link = '/login';
@@ -54,7 +52,7 @@ const AuthForm = ({alertMsg, formType, loading, email, isDisable, pass, onChange
                         <img alt="bohubrihi" className="rounded-circle p-2 bg-info" src="/logo.png" />
                     </a>
                 </div>
-                {alert}
+
                 <FormGroup className="my-4">
                     <Label>Email</Label>
                     <Input

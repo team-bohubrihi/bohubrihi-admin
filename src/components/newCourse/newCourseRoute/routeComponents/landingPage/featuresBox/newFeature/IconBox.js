@@ -13,20 +13,29 @@ const IconBox = ({isOpen, icons, FAIcon, toggle}) => {
         if(loadBreak+52>=len)setIsMoreAvailabe(false); //To stop rendering Load More Button
         const iconsMap = [...renderedIcons];
 
+        //Renders an icon
+        const singleIcon = (key, icon) => (
+        <p className='m-1 cPointer border rounded text-center py-3 singleIcon' onClick={()=>toggle(2, icon)} key={key}>
+            <FAIcon icon={icons[icon]}/>
+        </p>);
+
         let i;
         for(i=loadBreak; i<=loadBreak+52; i++){
             if(i===len)break;
             const _icn = iconNames[i];
-            if(_icn==='fas' || _icn==='far' || _icn ==='faFontAwesomeLogoFull' || _icn.indexOf('fa')<0)continue;//To avoid unnecessary property from icon's object
 
-            iconsMap.push(<p className='m-1 cPointer border rounded text-center py-3 singleIcon' onClick={()=>toggle(2, _icn)} key={i}>
-                <FAIcon icon={icons[_icn]}/>
-            </p>);
+            //To avoid unnecessary property from icon's object
+            if(_icn==='fas' || _icn==='far' || _icn ==='faFontAwesomeLogoFull' || _icn.indexOf('fa')<0)continue;
+
+            iconsMap.push(singleIcon(i, _icn));
         }
         setRenderedIcon(iconsMap);
-        setLoadBreak(i);//Keep the lenght of rendered icons so next time it can work as an index
+
+        //Keep the lenght of rendered icons so next time it can work as an index
+        setLoadBreak(i);
     }
 
+    // Loads the icon while opening the modal for the first time
     useEffect(()=>(isOpen && loadBreak<1) ? loadIcons() : null, [isOpen, loadBreak]);
 
     return (<Modal size='xl' fade={false} isOpen={isOpen}>

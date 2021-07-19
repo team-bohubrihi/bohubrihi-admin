@@ -22,8 +22,11 @@ const CourseLandingPage = () => {
     }));
     const dispatch = useDispatch();
 
+    const {id, cat, desc, difficulty, duration, language, subtitle, syllabusDesc, title } = courseData;
+    const courseFeats = courseData.features;
+
     // Handles changes of every input
-    const update = (e, name='desc', feature=null) => dispatch(updateCourseData(e, courseData.id, name, feature, courseData.features));
+    const update = (e, name='desc', feature=null) => dispatch(updateCourseData(e, id, name, feature, courseFeats));
 
     // Handles toggling of ImgSelectModal. It's triggered from CourseImgSelector first
     const [modalOpen, setModalOpen] = useState(false);
@@ -46,21 +49,21 @@ const CourseLandingPage = () => {
     return (<div className='courseDataFrm'>
         <FormGroup className='mb-4'>
             <Label className={lblClasses}>Course Title</Label>
-            <Input placeholder='Enter Course Title' name='title' onChange={e=>update(e)} className={inputClasses} type='text' autoComplete='off' />
+            <Input placeholder='Enter Course Title' name='title' onChange={e=>update(e)} value={title} className={inputClasses} type='text' autoComplete='off' />
         </FormGroup>
 
         <FormGroup className='mb-4'>
             <Label className={lblClasses}>Subtitle</Label>
-            <Input placeholder='Enter Course Subtitle' name='subtitle' onChange={e=>update(e)} className={inputClasses} type='text' autoComplete='off' />
+            <Input placeholder='Enter Course Subtitle' name='subtitle' onChange={e=>update(e)} value={subtitle} className={inputClasses} type='text' autoComplete='off' />
         </FormGroup>
 
         <FormGroup className='p-0 mx-0 mw-100' row>
             <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                <Input className={colInputClasses} name='duration' onChange={e=>update(e)} placeholder='Course Duration' value={courseData.duration ?? ''} type='number' />
+                <Input className={colInputClasses} name='duration' onChange={e=>update(e)} placeholder='Course Duration' value={duration} type='number' />
             </Col>
 
             <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                <Input className={colInputClasses} name='language' onChange={e=>update(e)} type='select'>
+                <Input className={colInputClasses} name='language' onChange={e=>update(e)} value={language} type='select'>
                     <option>--Language--</option>
                     <option>Bangla</option>
                     <option>English</option>
@@ -68,7 +71,7 @@ const CourseLandingPage = () => {
             </Col>
 
             <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                <Input className={colInputClasses} name='difficulty' onChange={e=>update(e)} type='select'>
+                <Input className={colInputClasses} value={difficulty} name='difficulty' onChange={e=>update(e)} type='select'>
                     <option>--Difficulty--</option>
                     <option>Basic</option>
                     <option>Intermidiate</option>
@@ -79,7 +82,7 @@ const CourseLandingPage = () => {
             </Col>
 
             <Col className='p-1 my-1' xl='3' lg='3' md='4' sm='6' xs='12'>
-                <Input onFocus={!categories ? ()=> dispatch(loadCategories()) : null} className={colInputClasses} name='cat' onChange={e=>update(e)} type='select'>
+                <Input onFocus={!categories ? ()=> dispatch(loadCategories()) : null} className={colInputClasses} value={cat} name='cat' onChange={e=>update(e)} type='select'>
                     <Categories cats={categories}/>
                 </Input>
             </Col>
@@ -91,19 +94,20 @@ const CourseLandingPage = () => {
                 features={features}
                 uploadFeature={data=>dispatch(addCourseFeature(data))}
                 selectFeature={update}
+                courseFeats={courseFeats}
             />
         </FormGroup>
 
         <FormGroup className='mb-4'>
             <Label className={lblClasses}>Course Description</Label>
 
-            <TextEditor update={data=>update(data, 'desc')} />
+            <TextEditor value={desc} update={data=>update(data, 'desc')} />
         </FormGroup>
 
         <FormGroup className='mb-4'>
             <Label className={lblClasses}>Syllabus Description(Optional)</Label>
 
-            <TextEditor update={data=>update(data, 'syllabusDesc')} />
+            <TextEditor value={syllabusDesc} update={data=>update(data, 'syllabusDesc')} />
         </FormGroup>
 
         <CourseImgSelector openModal={()=>setModalOpen(true)} imgs={compressedImgs}/>
@@ -112,7 +116,7 @@ const CourseLandingPage = () => {
             modalOpen={modalOpen}
             toggleModal={setModalOpen}
             compressedImgs={compressedImgs}
-            toggleAlert={()=>dispatch(toggleAlert(true))}
+            toggleAlert={()=>dispatch(toggleAlert(true, 'danger', 'Image is smaller than it\'s required size.'))}
             courseImgFinalize={courseImgFinalize}
         />
 
