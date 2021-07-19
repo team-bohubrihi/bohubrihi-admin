@@ -10,7 +10,7 @@
 
 @media only screen and (max-width: 767px){
     .newCourseNavbar{
-        right: -260px;
+        right: -265px;
         top: 0;
         z-index: 1;
         width: 260px;
@@ -21,8 +21,9 @@
     }
 
     .courseNavbarBtn{
-        left: -20px;
+        left: -28px;
         z-index: 2;
-        font-size: 23px;
+        font-size: 25px;
+        top: 100px;
     }
 }

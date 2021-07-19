@@ -1,16 +1,15 @@
 import React, {useState, useCallback} from 'react';
-import {Col, Button, Spinner} from 'reactstrap';
-import Slider from '@material-ui/core/Slider';
+import {Col, Button, Spinner, Input, Tooltip} from 'reactstrap';
 import Cropper from 'react-easy-crop';
 import {getCroppedImg} from '../../../../../../utils/helpers';
 import imageCompression from 'browser-image-compression';
 import ImgDialog from './ImgDialog';
 
-const ImgPreview = props => {
-  const {img, comImg, minWidth, finalImg, loading, setLoading, btnTrigger, label, alt, aspect, modifyImg} = props;
+const ImgPreview = ({img, comImg, minWidth, finalImg, loading, setLoading, btnTrigger, label, alt, aspect, modifyImg, info}) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [ttOpen, setTtOpen] = useState(false);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => setCroppedAreaPixels(croppedAreaPixels), []);
 
@@ -34,7 +33,10 @@ const ImgPreview = props => {
     }
   }, [finalImg, loading, croppedAreaPixels]);
 
-  let renderable = <button onClick={btnTrigger} className='py-5 rounded w-100 bg-white dashedBtn'>{label}</button>;
+  let renderable = <button onClick={btnTrigger} className='py-5 rounded w-100 bg-white dashedBtn'>
+    <Tooltip isOpen={ttOpen} target={'img'+minWidth} toggle={()=>setTtOpen(!ttOpen)}>{info}</Tooltip>
+    {label}
+  </button>;
 
   if(img){
     renderable = (<>
@@ -52,18 +54,8 @@ const ImgPreview = props => {
           />
         </div>
 
-        <div className='p-3 bg-white rounded-bottom'>
-          <div className='p-1'>
-            <Slider
-              value={zoom}
-              color='secondary'
-              min={1}
-              max={3}
-              step={0.1}
-              aria-labelledby="Zoom"
-              onChange={(e, zoom) => setZoom(zoom)}
-            />
-          </div>
+        <div className='p-2 bg-white rounded-bottom'>
+          <Input type='range' className='mb-1' min={1} max={3} step={.1} value={zoom} onChange={e=>setZoom(e.target.value)}/>
 
           <Button color='success' onClick={showCroppedImage}>Crop</Button>
           <Button color='info' onClick={()=>modifyImg(null)} className='ml-2'>Remove Image</Button>
@@ -77,7 +69,9 @@ const ImgPreview = props => {
   </div>) : renderable;
 
   return <Col className='my-1 px-1 position-relative rounded singleCourseImg' xl='4' lg='4' md='6' sm='6' xs='12'>
+    <div id={'img'+minWidth}>
       {renderable}
+    </div>
   </Col>
 }
 export default ImgPreview;

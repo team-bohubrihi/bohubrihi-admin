@@ -27,7 +27,7 @@ const Courses = () => {
     }, []);
 
     return (
-        <div className='container mt-2'>
+        <div className='p-1 p-sm-2'>
         <Card>
             <CardHeader>
                 <CardTitle tag='h3'>
@@ -42,9 +42,7 @@ const Courses = () => {
             <CardBody className='p-2'>
                 <ListGroup>
                     {data.map((course) => (
-                        <ListGroupItem key={course.id}>
-                            <Course {...course} />
-                        </ListGroupItem>
+                            <Course key={course.id} {...course} />
                     ))}
                 </ListGroup>
             </CardBody>

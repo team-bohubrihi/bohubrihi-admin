@@ -57,8 +57,9 @@
 @media only screen and (min-width: 992px) {
 .removeImgBtn{opacity: 0}
 
-.singleCourseImg:hover .removeImgBtn{opacity: 1}
-}
+.singleCourseImg:hover .removeImgBtn{
+    opacity: 1;
+}}
 
 .cropContainer {
     height: 300px;
@@ -66,7 +67,7 @@
 
 
 .iconsWrap{
-    max-height: 75vh;
+    max-height: 84vh;
     overflow-y: scroll;
 }
 
@@ -74,19 +75,19 @@
     flex-basis: calc(10% - .5rem);
 }
 
-@media only screen and (max-width: 575px){
+@media only screen and (max-width: 991px){
 .singleIcon{
     flex-basis: calc(20% - .5rem);
 }}
 
 .singleIcon svg, .singleFeature p svg{
-    font-size: 18px;
-    color: var(--white);
+    font-size: 22px;
+    color: var(--light);
 }
 
 .singleIcon:hover, .singleIcon:hover svg{
-    border-color: #00e1ff!important;
-    color: #00e1ff;
+    border-color: var(--pink)!important;
+    color: var(--pink);
 }
 
 .singleFeature p{

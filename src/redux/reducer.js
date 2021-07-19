@@ -8,7 +8,25 @@ const initialState = {
     uId: null,
     authLoading: false,
     showAlert: false,
-    newCourse: {},
+    alertType: '',
+    alertMsg: '',
+    alertCallback: null,
+    newCourse: {
+        id: '',
+        cat: '',
+        desc: '',
+        difficulty: '',
+        discount: '',
+        duration: '',
+        features: [],
+        language: '',
+        price: '',
+        totalPrice: 'Free',
+        status: '',
+        subtitle: '',
+        syllabusDesc: '',
+        title: ''
+    },
     categories: null,
     courseFeatures: null
 };
@@ -42,12 +60,17 @@ const authReducer = (state = initialState, action) => {
 
 // this reducer handles the utility(like loading, alerts appearance except auth's) of the app
 const utilityReducer = (state = initialState, action) => {
+    let result;
     switch (action.type) {
         case acTypes.TOGGLE_ALERT:
+            result=action.payload
             return {
                 ...state,
-                showAlert: action.payload,
-            };
+                showAlert: result.isOpen,
+                alertType: result.type,
+                alertMsg: result.msg,
+                alertCallback: result.callback
+            }
 
         default:
             return state;

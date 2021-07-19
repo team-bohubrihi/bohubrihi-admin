@@ -1,9 +1,6 @@
-import { useEffect } from 'react';
-import { titleChanger } from '../../utils/helpers';
-// import Courses from '../../courses/Courses';
+import React from "react";
 
 const Home = () => {
-    useEffect(() => titleChanger('Home'));
     return <></>
 };
 export default Home;

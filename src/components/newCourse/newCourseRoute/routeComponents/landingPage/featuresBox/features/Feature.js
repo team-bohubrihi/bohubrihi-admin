@@ -1,11 +1,11 @@
 import React from 'react';
 import {ListGroupItem, Input, FormGroup, Row, Col} from 'reactstrap';
 
-const Feature = ({id, selectFeature, icon, name}) => (<ListGroupItem className='bg-dark p-0 singleFeature'>
+const Feature = ({id, selectFeature, icon, name, checked}) => (<ListGroupItem className='bg-dark p-0 singleFeature'>
     <Row className='m-0'>
         <Col className='pt-3' xl='1' lg='1' md='1' sm='1' xs='2'>
             <FormGroup check className='d-block text-center'>
-                <Input id={id} onChange={e=>selectFeature(e, 'features', id)} className='cPointer mt-2' type='checkbox' />
+                <Input checked={checked} id={id} onChange={e=>selectFeature(e, 'features', id)} className='cPointer mt-2' type='checkbox' />
             </FormGroup>
         </Col>
 

@@ -2,11 +2,10 @@ import React, {useState} from 'react';
 import {Spinner, Collapse, Card, CardHeader, CardBody, Button} from 'reactstrap';
 import AddFeature from './newFeature/AddFeature';
 import Features from './features/Features';
-import AlertMsg from '../../../../../../utils/AlertMsg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as icons from '@fortawesome/free-solid-svg-icons';
 
-const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature}) => {
+const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature, courseFeats}) => {
     const [isOpen, setIsOpen] = useState([false, false, false]);//toggler for two collapses and IconBox
     const [featuresLoading, setFeaturesLoading] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState(null);//The selected icon for new feature
@@ -40,7 +39,7 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature}) => 
             //Get the uploaded feature from ui and make it selected as course feature
             const selector = document.getElementById(name);
             selector.checked = true;
-            selector.scrollIntoView({behavior: "smooth", block: "end"});
+            selector.scrollIntoView({behavior: "smooth", block: "start"});
             selectFeature({target: selector}, 'features', name);
             setIconUploading(false);
         })
@@ -54,15 +53,14 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature}) => 
 
         <Collapse isOpen={isOpen[0]}>
             <CardBody className='p-2'>
-                <AlertMsg type='info' msg='Feature uploaded and added as a feature of this course.' />
-                <h4 className='bg-info mb-0 rounded-top overflow-hidden text-white p-2'>
+                <h5 className='bg-info mb-0 rounded-top overflow-hidden text-white p-2'>
                     Features For Courses
                     <Button title='Add New Feature' onClick={()=>toggle(1)} color='secondary' className='px-1 py-0 float-right'>
                         <FontAwesomeIcon icon={icons.faPlus}/>
                     </Button>
-                </h4>
+                </h5>
 
-                <div className='border-top-0 rounded-bottom mb-2 bg-primary'>
+                <div className='text-center border-top-0 rounded-bottom mb-1 bg-primary'>
                     <Collapse isOpen={isOpen[1]}>
                         {iconUploading ? <Spinner className='bg-dark my-2' color='white' /> : <AddFeature
                             icons={icons}
@@ -85,6 +83,7 @@ const FeautresBox = ({loadFeatures, features, uploadFeature, selectFeature}) => 
                     FAIcon={FontAwesomeIcon}
                     icons={icons}
                     loading={featuresLoading}
+                    courseFeats={courseFeats}
                 />
             </CardBody>
         </Collapse>
