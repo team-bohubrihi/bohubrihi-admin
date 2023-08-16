@@ -5,7 +5,7 @@ import Body from './components/body/Body';
 import './css/reusuable.css';
 import { store } from './redux/store';
 
-// Change from psimanta
+// Meshkat comment
 
 const App = () => (
     <Provider store={store}>
